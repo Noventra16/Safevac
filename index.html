@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#0a1628">
+<title>SafeVac</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@700;800;900&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;background:#0a1628;font-family:Inter,sans-serif;overflow-x:hidden}
+body{display:flex;justify-content:center}
+:root{--navy:#0a1628;--teal:#0f7173;--orange:#e85d04;--red:#b91c1c;--green:#166534;--border:#e4eaf2;--muted:#7a90a8;--text:#0b1f3a;--bg:#f2f6fb}
+.scr{display:none;width:100%;max-width:480px;min-height:100vh;flex-direction:column}
+.scr.on{display:flex}
+
+/* ══ HOME SCREEN ══ */
+#s0{background:linear-gradient(160deg,#050e1f 0%,#0a1e3a 40%,#0d2545 70%,#060f1e 100%);overflow-y:auto;align-items:center;padding:28px 18px 40px}
+
+.logo-box{width:88px;height:88px;background:linear-gradient(135deg,#0f7173,#0a5456);border-radius:24px;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;box-shadow:0 8px 32px rgba(15,113,115,.55)}
+.logo-box svg{width:48px;height:48px;fill:none;stroke:#fff;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+
+/* ★ APP NAME — BIG BOLD SHADOW ★ */
+.app-name{
+  font-family:"Space Grotesk",sans-serif;
+  font-size:90px;
+  font-weight:900;
+  color:#fff;
+  letter-spacing:-5px;
+  line-height:.92;
+  text-align:center;
+  width:100%;
+  text-shadow:
+    0 2px 0 #000,
+    0 4px 8px rgba(0,0,0,.95),
+    0 8px 20px rgba(0,0,0,.8),
+    0 16px 40px rgba(0,0,0,.6),
+    0 0 70px rgba(15,113,115,.7),
+    0 0 130px rgba(15,113,115,.3);
+  -webkit-text-stroke:2px rgba(255,255,255,.12);
+  paint-order:stroke fill;
+  margin-bottom:10px;
+}
+.app-sub{font-family:"Space Grotesk",sans-serif;font-size:11px;font-weight:700;color:rgba(255,255,255,.38);letter-spacing:4px;text-transform:uppercase;text-align:center;margin-bottom:22px}
+
+/* PURPOSE CARD */
+.purpose-card{width:100%;max-width:440px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:16px;padding:16px 18px;margin-bottom:20px}
+.purpose-title{font-size:13px;font-weight:700;color:#fff;margin-bottom:8px;display:flex;align-items:center;gap:7px}
+.purpose-body{font-size:12.5px;color:rgba(255,255,255,.62);line-height:1.9}
+
+/* FEATURE PILLS */
+.feat-row{display:flex;flex-wrap:wrap;gap:7px;width:100%;max-width:440px;margin-bottom:20px;justify-content:center}
+.feat-pill{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:7px 13px;font-size:11px;font-weight:600;color:rgba(255,255,255,.65);display:flex;align-items:center;gap:6px}
+
+/* SETUP CARD ON HOME */
+.home-setup{width:100%;max-width:440px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:18px;padding:18px;margin-bottom:18px}
+.home-setup-title{font-size:14px;font-weight:700;color:#fff;margin-bottom:14px;display:flex;align-items:center;gap:7px}
+.home-inp-label{font-size:11px;font-weight:600;color:rgba(255,255,255,.55);margin-bottom:5px;display:block}
+.home-inp{width:100%;background:rgba(255,255,255,.08);border:1.5px solid rgba(255,255,255,.15);border-radius:9px;padding:11px 13px;font-size:14px;color:#fff;outline:none;font-family:Inter,sans-serif;margin-bottom:10px;transition:border-color .2s}
+.home-inp:focus{border-color:#0f7173;background:rgba(255,255,255,.12)}
+.home-inp::placeholder{color:rgba(255,255,255,.3)}
+.home-type-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:12px}
+.hto{background:rgba(255,255,255,.06);border:1.5px solid rgba(255,255,255,.12);border-radius:8px;padding:9px 4px;text-align:center;cursor:pointer;font-size:11px;font-weight:600;color:rgba(255,255,255,.5);transition:all .15s}
+.hto.on{border-color:#0f7173;background:rgba(15,113,115,.3);color:#fff}
+
+/* GPS SECTION ON HOME */
+.gps-map-wrap{border-radius:12px;overflow:hidden;height:190px;border:1.5px solid rgba(255,255,255,.15);position:relative;background:#1a2d4a;margin-bottom:10px}
+.gps-map-wrap iframe{width:100%;height:100%;border:none;display:block}
+.gps-overlay{position:absolute;inset:0;background:rgba(10,22,40,.78);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;cursor:pointer}
+.gps-ov-icon{font-size:36px}
+.gps-ov-title{font-size:13px;font-weight:700;color:#fff;text-align:center}
+.gps-ov-sub{font-size:11px;color:rgba(255,255,255,.6);text-align:center;max-width:220px;line-height:1.5}
+.gps-btn-home{width:100%;background:rgba(15,113,115,.8);color:#fff;border:1.5px solid rgba(15,113,115,.9);border-radius:9px;padding:12px;font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:8px;transition:background .2s}
+.gps-btn-home svg{width:15px;height:15px;fill:none;stroke:#fff;stroke-width:2;stroke-linecap:round;flex-shrink:0}
+.gps-status-home{display:none;border-radius:9px;padding:10px 12px;font-size:12px;margin-bottom:8px;line-height:1.55}
+.gps-ok-home{background:rgba(22,163,74,.2);border:1px solid rgba(22,163,74,.4);color:#86efac;display:block}
+.gps-err-home{background:rgba(185,28,28,.2);border:1px solid rgba(185,28,28,.4);color:#fca5a5;display:block}
+.coord-detected{display:none;background:rgba(15,113,115,.18);border:1.5px solid rgba(15,113,115,.5);border-radius:9px;padding:11px 13px;margin-bottom:8px}
+.cdot{width:8px;height:8px;border-radius:50%;background:#16a29e;animation:pd 1.4s infinite;flex-shrink:0}
+@keyframes pd{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.35;transform:scale(.6)}}
+.or-divider{text-align:center;font-size:11px;color:rgba(255,255,255,.3);margin:2px 0 8px;letter-spacing:1px}
+.latlon-home{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
+
+/* FLOORS ROW ON HOME */
+.fl-row-home{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.07);border:1.5px solid rgba(255,255,255,.13);border-radius:9px;padding:8px 12px;margin-bottom:10px}
+.fl-btn-home{width:30px;height:30px;border-radius:7px;background:rgba(255,255,255,.12);border:none;font-size:18px;cursor:pointer;color:#fff;font-weight:700;display:flex;align-items:center;justify-content:center}
+.fl-val-home{flex:1;text-align:center;font-size:18px;font-weight:800;color:#fff;font-family:"Space Grotesk",sans-serif}
+
+/* GENERATE BUTTON */
+.gen-btn{width:100%;background:linear-gradient(135deg,#0f7173,#0a5456);color:#fff;border:none;border-radius:13px;padding:17px;font-size:17px;font-weight:800;cursor:pointer;font-family:"Space Grotesk",sans-serif;box-shadow:0 4px 20px rgba(15,113,115,.45);margin-bottom:10px;display:flex;align-items:center;justify-content:center;gap:9px}
+
+/* PREMIUM TEASER MINI */
+.prem-teaser{width:100%;max-width:440px;background:linear-gradient(135deg,rgba(232,93,4,.2),rgba(232,93,4,.07));border:1.5px solid rgba(232,93,4,.38);border-radius:14px;padding:14px 16px;margin-bottom:6px;cursor:pointer}
+.pt-title{font-size:13px;font-weight:700;color:#fff;margin-bottom:7px}
+.pt-grid{display:grid;grid-template-columns:1fr 1fr;gap:3px 10px}
+.pt-item{font-size:11px;color:rgba(255,255,255,.58);padding:2px 0}
+
+.home-note{font-size:11px;color:rgba(255,255,255,.22);text-align:center;line-height:1.8}
+
+/* ══ MAIN APP ══ */
+#s3{background:var(--bg)}
+.topbar{background:var(--navy);padding:12px 16px;display:flex;align-items:center;gap:10px;flex-shrink:0}
+.tb-icon{width:34px;height:34px;background:var(--teal);border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.tb-icon svg{width:18px;height:18px;fill:none;stroke:#fff;stroke-width:2;stroke-linecap:round}
+.tb-name{font-family:"Space Grotesk",sans-serif;font-size:14px;font-weight:800;color:#fff}
+.tb-sub{font-size:10px;color:rgba(255,255,255,.4);margin-top:1px}
+.prem-badge{margin-left:auto;background:var(--orange);color:#fff;font-size:10px;font-weight:700;padding:6px 11px;border-radius:20px;cursor:pointer;border:none;white-space:nowrap;flex-shrink:0}
+.app-scroll{flex:1;overflow-y:auto}
+.pane{display:none;padding-bottom:80px}
+.pane.on{display:block}
+.sec-head{font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.7px;padding:14px 16px 8px}
+/* MAP */
+.bldg-map{margin:10px 14px 0;border-radius:13px;overflow:hidden;height:225px;border:1.5px solid var(--border);position:relative;background:#d8e8f5}
+.bldg-map iframe{width:100%;height:100%;border:none}
+.map-badge{position:absolute;top:10px;left:12px;background:rgba(10,22,40,.88);color:#fff;font-size:10px;font-weight:700;padding:5px 11px;border-radius:20px;pointer-events:none;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.info-pills{display:flex;gap:8px;padding:8px 14px 0}
+.pill{flex:1;background:#fff;border-radius:11px;padding:9px 10px;border:1px solid var(--border);display:flex;align-items:center;gap:7px}
+.pill svg{width:13px;height:13px;fill:none;stroke:#3b82f6;stroke-width:2;flex-shrink:0}
+.pill-label{font-size:10px;color:var(--muted)}
+.pill-val{font-size:11px;font-weight:600;color:var(--text)}
+.live-dot{width:7px;height:7px;border-radius:50%;background:#22c55e;animation:pd 1.4s infinite;margin-left:auto;flex-shrink:0}
+.exit-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:0 14px;margin-top:8px}
+.exit-card{background:#fff;border-radius:12px;padding:11px 12px;border:1.5px solid var(--border);cursor:pointer}
+.exit-card.on{border-color:var(--teal);background:#e1f5f5}
+.exit-name{font-size:12px;font-weight:700;color:var(--text);margin-bottom:2px}
+.exit-dist{font-size:11px;color:#555;margin-bottom:4px}
+.exit-tag{font-size:9px;font-weight:700;padding:2px 7px;border-radius:10px;background:#dcfce7;color:var(--green)}
+.sos-row{display:flex;gap:8px;padding:10px 14px 0}
+.sos-btn{flex:2;background:var(--red);color:#fff;border:none;border-radius:13px;padding:15px;font-size:14px;font-weight:800;cursor:pointer;font-family:"Space Grotesk",sans-serif;display:flex;align-items:center;justify-content:center;gap:7px}
+.sos-btn svg{width:17px;height:17px;fill:none;stroke:#fff;stroke-width:2;stroke-linecap:round}
+.sos-btn.pulse{animation:sp .65s infinite}
+@keyframes sp{0%,100%{transform:scale(1)}50%{transform:scale(1.04)}}
+.drill-btn{flex:1;background:#1a3558;color:#fff;border:none;border-radius:13px;padding:15px;font-size:12px;font-weight:700;cursor:pointer}
+.asm-row{display:flex;gap:8px;padding:0 14px;margin-top:8px}
+.asm{flex:1;background:#fff;border-radius:11px;padding:10px 12px;border:1px solid var(--border)}
+.asm-name{font-size:12px;font-weight:700;color:var(--text)}
+.asm-cap{font-size:10px;color:var(--muted);margin-top:2px}
+/* FLOORS */
+.floor-tabs{display:flex;gap:6px;padding:10px 14px 0;flex-wrap:wrap}
+.ftab{flex:1;min-width:50px;text-align:center;padding:8px 4px;background:#fff;border:1px solid var(--border);border-radius:9px;font-size:11px;color:var(--muted);cursor:pointer;font-weight:500;transition:all .15s}
+.ftab.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+.floor-svg{margin:8px 14px 0;border-radius:13px;overflow:hidden;border:1px solid var(--border);background:#fff}
+.floor-svg svg{width:100%;height:auto;display:block}
+.route-steps{margin:8px 14px 0;background:#fff;border-radius:12px;padding:14px;border:1px solid var(--border)}
+.rs{display:flex;gap:9px;padding:6px 0;border-bottom:1px solid #f1f5f9;font-size:12px;color:var(--text);line-height:1.5;align-items:flex-start}
+.rs:last-child{border:none}
+.rsn{width:20px;height:20px;min-width:20px;background:var(--navy);color:#fff;border-radius:50%;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;margin-top:1px;flex-shrink:0}
+/* EMERGENCY */
+.em-chips{display:flex;gap:7px;padding:10px 14px 0;overflow-x:auto}
+.em-chips::-webkit-scrollbar{display:none}
+.em-chip{flex-shrink:0;padding:8px 13px;border-radius:20px;font-size:12px;font-weight:700;cursor:pointer;background:#fff;border:1.5px solid var(--border);color:var(--muted);transition:all .15s}
+.em-chip.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+.em-banner{margin:8px 14px 0;border-radius:13px;padding:16px}
+.em-title{font-family:"Space Grotesk",sans-serif;font-size:20px;font-weight:800;color:#fff;margin-bottom:3px}
+.em-sub{font-size:12px;color:rgba(255,255,255,.75)}
+.em-calls{display:flex;gap:7px;padding:8px 14px 0;flex-wrap:wrap}
+.em-call-btn{flex:1;min-width:80px;padding:9px 6px;border-radius:9px;border:none;font-size:11px;font-weight:700;cursor:pointer;text-decoration:none;display:flex;align-items:center;justify-content:center;color:#fff}
+.steps-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:8px 14px 0}
+.step-card{background:#fff;border-radius:11px;padding:10px;border:1px solid var(--border)}
+.step-num{font-size:20px;font-weight:800;color:#e8edf5;font-family:"Space Grotesk",sans-serif;line-height:1;margin-bottom:3px}
+.step-title{font-size:11px;font-weight:700;color:var(--text);margin-bottom:3px}
+.step-body{font-size:11px;color:#555;line-height:1.4}
+.do-dont{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:8px 14px 0}
+.do-box{background:#dcfce7;border-radius:10px;padding:10px}
+.dont-box{background:#fee2e2;border-radius:10px;padding:10px}
+.do-box strong{font-size:11px;font-weight:700;color:#166534;display:block;margin-bottom:5px}
+.dont-box strong{font-size:11px;font-weight:700;color:#991b1b;display:block;margin-bottom:5px}
+.dd-item{font-size:11px;color:#1a3558;margin-bottom:3px;line-height:1.4}
+/* CONTACTS */
+.contact-list{padding:0 14px;display:flex;flex-direction:column;gap:8px}
+.contact-row{background:#fff;border-radius:12px;padding:12px 14px;border:1px solid var(--border);display:flex;align-items:center;gap:12px}
+.c-icon{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.c-name{font-size:13px;font-weight:700;color:var(--text);flex:1}
+.c-num{font-size:11px;color:var(--muted)}
+.c-btn{background:var(--teal);color:#fff;border:none;border-radius:8px;padding:8px 14px;font-size:12px;font-weight:700;text-decoration:none;white-space:nowrap}
+/* MORE */
+.more-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;padding:0 14px}
+.more-card{background:#fff;border-radius:14px;padding:15px;border:1px solid var(--border);cursor:pointer;text-align:center;transition:all .15s}
+.more-card:active{background:#e1f5f5;border-color:var(--teal)}
+.mc-icon{font-size:30px;margin-bottom:7px;display:block}
+.mc-title{font-size:13px;font-weight:700;color:var(--text)}
+.mc-desc{font-size:10px;color:var(--muted);margin-top:3px}
+/* PREMIUM PANES */
+.pp{display:none}
+.back-row{display:flex;align-items:center;gap:10px;padding:12px 16px 0}
+.bk{background:none;border:none;font-size:22px;cursor:pointer;color:var(--text);line-height:1}
+.pt{font-size:15px;font-weight:700;color:var(--text);flex:1}
+.ai-card{background:#fff;border-radius:13px;padding:14px;border:1px solid var(--border);margin:8px 14px 0}
+.ai-row{display:flex;gap:9px;padding:7px 0;border-bottom:1px solid #f1f5f9;align-items:flex-start}
+.ai-row:last-child{border:none}
+.ai-row.active{background:#e1f5f5;margin:0 -14px;padding:7px 14px;border-radius:8px}
+.ai-c{width:24px;height:24px;min-width:24px;border-radius:50%;background:var(--navy);color:#fff;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;margin-top:1px;flex-shrink:0}
+.ai-c.done{background:#16a34a}
+.ai-c.act{background:var(--teal)}
+.ai-t{font-size:12px;color:var(--text);line-height:1.5;flex:1}
+.xbtn{display:flex;align-items:center;justify-content:center;gap:8px;color:#fff;border:none;border-radius:11px;padding:13px;font-size:14px;font-weight:700;cursor:pointer;font-family:"Space Grotesk",sans-serif;margin-top:8px}
+.vbox{background:var(--navy);border-radius:12px;padding:14px 16px;margin:8px 14px 0;display:flex;align-items:center;gap:12px}
+.wv{display:flex;align-items:center;gap:3px}
+.wv span{display:block;width:4px;border-radius:4px;background:#16a29e;animation:wva .7s infinite}
+.wv span:nth-child(1){height:8px;animation-delay:0s}
+.wv span:nth-child(2){height:16px;animation-delay:.1s}
+.wv span:nth-child(3){height:22px;animation-delay:.2s}
+.wv span:nth-child(4){height:16px;animation-delay:.3s}
+.wv span:nth-child(5){height:8px;animation-delay:.4s}
+@keyframes wva{0%,100%{transform:scaleY(.4)}50%{transform:scaleY(1)}}
+.vt{font-size:12px;color:#fff;flex:1;line-height:1.5}
+.fm-list{padding:0 14px;display:flex;flex-direction:column;gap:8px}
+.fm-card{background:#fff;border-radius:12px;padding:12px 14px;border:1px solid var(--border);display:flex;align-items:center;gap:11px}
+.fm-av{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;flex-shrink:0}
+.fm-nm{font-size:13px;font-weight:700;color:var(--text)}
+.fm-safe{font-size:11px;color:#166634;font-weight:600}
+.fm-sos-st{font-size:11px;color:#991b1b;font-weight:600;animation:bk 1s infinite}
+@keyframes bk{0%,100%{opacity:1}50%{opacity:.3}}
+.fm-sos-btn{background:var(--red);color:#fff;border:none;border-radius:8px;padding:7px 11px;font-size:11px;font-weight:700;cursor:pointer;white-space:nowrap}
+.wh{border-radius:13px;padding:16px;margin:8px 14px 0;color:#fff}
+.wt{font-family:"Space Grotesk",sans-serif;font-size:54px;font-weight:800;line-height:1}
+.wd{font-size:14px;opacity:.85;margin-top:4px}
+.ws{display:flex;gap:16px;margin-top:12px}
+.wsv{font-size:14px;font-weight:700;font-family:"Space Grotesk",sans-serif}
+.wsl{font-size:10px;opacity:.65}
+.wa{border-radius:11px;padding:12px 13px;margin:7px 14px 0;border-left:4px solid;display:flex;gap:10px}
+.wa-r{background:#fff5f5;border-color:#ef4444}
+.wa-a{background:#fffbeb;border-color:#f59e0b}
+.cl-item{display:flex;align-items:center;gap:11px;background:#fff;border-radius:11px;padding:11px 14px;border:1px solid var(--border);cursor:pointer;transition:all .15s}
+.cl-item.done{background:#f0fdf4;border-color:#86efac}
+.cl-chk{width:22px;height:22px;min-width:22px;border-radius:6px;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0}
+.cl-item.done .cl-chk{background:#16a34a;border-color:#16a34a;color:#fff}
+.lg{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;padding:0 14px}
+.lb{background:#fff;border:1.5px solid var(--border);border-radius:11px;padding:10px 6px;text-align:center;cursor:pointer;transition:all .15s}
+.lb.on{border-color:var(--teal);background:#e1f5f5}
+.ln{font-size:15px;font-weight:700;color:var(--text);display:block}
+.le{font-size:10px;color:var(--muted);display:block;margin-top:1px}
+.lp{margin:10px 14px 0;background:#fff;border-radius:12px;padding:14px;border:1px solid var(--border)}
+.sch-g{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:0 14px}
+.sch{background:#fff;border-radius:12px;padding:12px 8px;border:1.5px solid var(--border);text-align:center;cursor:pointer;transition:all .15s}
+.sch.armed{border-color:var(--red);background:#fff5f5}
+.sch-i{font-size:24px;margin-bottom:4px}
+.sch-n{font-size:11px;font-weight:700;color:var(--text)}
+.sch-m{font-size:10px;color:var(--muted)}
+.sh{background:#fff;border-radius:12px;padding:13px;border:1px solid var(--border);margin:8px 14px 0}
+.shi{display:flex;gap:8px;padding:5px 0;border-bottom:1px solid #f8fafc;font-size:11px}
+.shi:last-child{border:none}
+/* SETTINGS */
+.bic{margin:0 14px;background:#fff;border-radius:14px;padding:16px;border:1px solid var(--border)}
+.pu{margin:8px 14px 0;background:linear-gradient(135deg,var(--navy),#1a3558);border-radius:14px;padding:18px}
+.put{font-family:"Space Grotesk",sans-serif;font-size:18px;font-weight:800;color:#fff;margin-bottom:5px}
+.pud{font-size:12px;color:rgba(255,255,255,.55);margin-bottom:14px;line-height:1.6}
+.pub{width:100%;background:var(--orange);color:#fff;border:none;border-radius:10px;padding:13px;font-size:14px;font-weight:700;cursor:pointer;font-family:"Space Grotesk",sans-serif}
+/* TABS */
+.tabs{display:flex;background:var(--navy);border-top:1px solid rgba(255,255,255,.07);flex-shrink:0}
+.tab{flex:1;padding:9px 3px 7px;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;border-top:2px solid transparent;transition:all .15s}
+.tab svg{width:20px;height:20px;fill:none;stroke:rgba(255,255,255,.35);stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.tab span{font-size:9px;color:rgba(255,255,255,.35);font-weight:500}
+.tab.on{border-top-color:#16a29e}
+.tab.on svg{stroke:#16a29e}
+.tab.on span{color:#16a29e}
+/* PAYMENT */
+#s4{background:var(--bg);overflow-y:auto}
+.ph{background:linear-gradient(135deg,var(--navy),#0f4a4b);padding:24px 18px;text-align:center}
+.ph h2{font-family:"Space Grotesk",sans-serif;font-size:24px;font-weight:800;color:#fff;margin-bottom:4px}
+.ph p{font-size:12px;color:rgba(255,255,255,.6)}
+.pb{padding:16px;display:flex;flex-direction:column;gap:12px}
+.bc{background:#fff;border-radius:14px;padding:16px;border:1px solid var(--border)}
+.bi{display:flex;gap:10px;align-items:flex-start;margin-bottom:9px;font-size:12px;color:#444;line-height:1.5}
+.bi:last-child{margin:0}
+.tk{width:19px;height:19px;min-width:19px;background:#dcfce7;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.tk svg{width:10px;height:10px;fill:none;stroke:#166634;stroke-width:2.5;stroke-linecap:round}
+.pc{background:#fff;border-radius:14px;padding:18px;border:1px solid var(--border)}
+.ptop{display:flex;justify-content:space-between;align-items:center;padding-bottom:16px;border-bottom:1px solid #f1f5f9;margin-bottom:16px}
+.pamt{font-family:"Space Grotesk",sans-serif;font-size:56px;font-weight:800;color:var(--text);line-height:1}
+.pwas{font-size:12px;color:var(--muted);text-decoration:line-through;margin-top:3px}
+.psav{font-size:12px;color:#16a34a;font-weight:700}
+.pbdg{background:#dcfce7;color:#166634;font-size:11px;font-weight:700;padding:8px 12px;border-radius:12px;text-align:center;line-height:1.5}
+.qrs{text-align:center;margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid #f1f5f9}
+.qrl{font-size:11px;font-weight:700;color:var(--text);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px}
+.qrb{display:inline-block;background:#fff;padding:10px;border-radius:12px;border:2px solid var(--border)}
+.qrb img{width:180px;height:180px;display:block;image-rendering:pixelated}
+.qrc{font-size:11px;color:#555;margin-top:10px;line-height:1.8}
+.uidr{display:flex;align-items:center;background:#f8fafc;border-radius:11px;padding:11px 14px;border:1.5px solid var(--border);margin-bottom:14px;gap:10px}
+.uid{font-family:"Space Grotesk",sans-serif;font-size:18px;font-weight:800;color:var(--text);flex:1}
+.cpb{background:var(--navy);color:#fff;border:none;border-radius:8px;padding:9px 16px;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;transition:background .2s}
+.cpb.ok{background:#16a34a}
+.umb{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;background:linear-gradient(135deg,#16a34a,#15803d);color:#fff;border:none;border-radius:13px;padding:17px;font-size:16px;font-weight:800;cursor:pointer;font-family:"Space Grotesk",sans-serif;text-decoration:none;margin-bottom:13px;box-shadow:0 4px 16px rgba(22,163,74,.35)}
+.al{font-size:11px;font-weight:700;color:var(--muted);text-align:center;margin-bottom:10px;text-transform:uppercase;letter-spacing:.5px}
+.ag{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:16px}
+.aa{display:flex;align-items:center;gap:11px;padding:13px 14px;background:#f8fafc;border:1.5px solid var(--border);border-radius:13px;text-decoration:none;transition:border-color .15s,background .15s}
+.aa:active{border-color:var(--teal);background:#e1f5f5}
+.alogo{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden}
+.an{font-size:13px;font-weight:700;color:var(--text);display:block}
+.ah{font-size:10px;color:var(--muted);display:block}
+.acb{background:#f8fafc;border-radius:13px;padding:16px;border:1.5px solid var(--border)}
+.act{font-size:14px;font-weight:700;color:var(--text);margin-bottom:4px}
+.acs{font-size:12px;color:var(--muted);margin-bottom:12px;line-height:1.5}
+.txni{width:100%;background:#fff;border:1.5px solid var(--border);border-radius:10px;padding:13px 14px;font-size:15px;color:var(--text);outline:none;font-family:Inter,sans-serif;margin-bottom:10px;transition:border-color .2s}
+.txni:focus{border-color:var(--teal)}
+.actn{width:100%;background:linear-gradient(135deg,var(--orange),#f4845f);color:#fff;border:none;border-radius:12px;padding:16px;font-size:16px;font-weight:800;cursor:pointer;font-family:"Space Grotesk",sans-serif;margin-bottom:9px;display:flex;align-items:center;justify-content:center;gap:9px}
+.byp{width:100%;background:#f0fdf4;color:#166634;border:1.5px solid #bbf7d0;border-radius:11px;padding:13px;font-size:13px;font-weight:700;cursor:pointer}
+/* SUCCESS */
+#s5{background:var(--bg);overflow-y:auto;align-items:center;padding:48px 20px;text-align:center}
+/* UTILS */
+.sp{display:none;position:fixed;inset:0;background:rgba(10,22,40,.9);z-index:999;flex-direction:column;align-items:center;justify-content:center;gap:16px}
+.sp.on{display:flex}
+.spr{width:46px;height:46px;border:4px solid rgba(255,255,255,.12);border-top-color:#16a29e;border-radius:50%;animation:spin .75s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.spt{color:#fff;font-size:14px;font-weight:500}
+.tst{position:fixed;bottom:88px;left:50%;transform:translateX(-50%);background:rgba(10,22,40,.95);color:#fff;font-size:12px;font-weight:600;padding:10px 20px;border-radius:20px;z-index:998;opacity:0;transition:opacity .3s;pointer-events:none;white-space:nowrap;max-width:90vw;text-align:center}
+.tst.on{opacity:1}
+</style>
+</head>
+<body>
+<div class="sp" id="SP"><div class="spr"></div><div class="spt" id="SPT">Loading...</div></div>
+<div class="tst" id="TST"></div>
+
+<!-- ═══════════════════════════════════════
+     HOME SCREEN — functional from the start
+═══════════════════════════════════════ -->
+<div class="scr on" id="s0">
+
+  <!-- APP NAME + LOGO -->
+  <div class="logo-box">
+    <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>
+  </div>
+  <div class="app-name">SafeVac</div>
+  <div class="app-sub">Building Evacuation App &nbsp;&#8212;&nbsp; India</div>
+
+  <!-- PURPOSE -->
+  <div class="purpose-card">
+    <div class="purpose-title">&#127919; What SafeVac does</div>
+    <div class="purpose-body">
+      SafeVac is India&#x27;s universal building evacuation app &#8212; for every <strong style="color:#fff">school, hospital, office, mall, apartment and public building</strong> across the country.<br><br>
+      Enter your building below. The app auto-locates it via GPS, generates floor-wise evacuation plans, gives 7 emergency protocols with Do/Don&#x27;t guides, and lets you trigger SOS with one tap &#8212; even without internet.
+    </div>
+  </div>
+
+  <!-- FREE FEATURES PILLS -->
+  <div class="feat-row">
+    <div class="feat-pill">&#127919; GPS auto-locate any building</div>
+    <div class="feat-pill">&#128680; 7 emergency protocols</div>
+    <div class="feat-pill">&#128222; Emergency call buttons</div>
+    <div class="feat-pill">&#128241; Works offline</div>
+    <div class="feat-pill">&#127968; Any building in India</div>
+  </div>
+
+  <!-- ★ SETUP FORM — right on the home screen ★ -->
+  <div class="home-setup">
+    <div class="home-setup-title">&#127959; Set up your building</div>
+
+    <label class="home-inp-label">Building name *</label>
+    <input class="home-inp" id="hNm" placeholder="e.g. ABC Global School, City Hospital, Tower B">
+
+    <label class="home-inp-label">Address</label>
+    <input class="home-inp" id="hAd" placeholder="e.g. Sector 62, Noida, Uttar Pradesh">
+
+    <label class="home-inp-label">Building type</label>
+    <div class="home-type-grid">
+      <div class="hto on" data-t="school" onclick="hSelT(this)">&#127979; School</div>
+      <div class="hto" data-t="college" onclick="hSelT(this)">&#127979; College</div>
+      <div class="hto" data-t="hospital" onclick="hSelT(this)">&#127973; Hospital</div>
+      <div class="hto" data-t="office" onclick="hSelT(this)">&#127970; Office</div>
+      <div class="hto" data-t="mall" onclick="hSelT(this)">&#127978; Mall</div>
+      <div class="hto" data-t="apartment" onclick="hSelT(this)">&#127968; Apartment</div>
+      <div class="hto" data-t="factory" onclick="hSelT(this)">&#127981; Factory</div>
+      <div class="hto" data-t="hotel" onclick="hSelT(this)">&#127960; Hotel</div>
+      <div class="hto" data-t="other" onclick="hSelT(this)">&#127963; Other</div>
+    </div>
+
+    <label class="home-inp-label" style="margin-top:10px">Number of floors</label>
+    <div class="fl-row-home">
+      <button class="fl-btn-home" onclick="chFL(-1)">&#8722;</button>
+      <div class="fl-val-home" id="flV">3</div>
+      <button class="fl-btn-home" onclick="chFL(1)">+</button>
+    </div>
+
+    <label class="home-inp-label">Emergency contact mobile</label>
+    <input class="home-inp" id="hPh" type="tel" placeholder="+91 XXXXXXXXXX" style="margin-bottom:14px">
+
+    <!-- GPS LIVE MAP -->
+    <label class="home-inp-label">&#127919; GPS location (tap to auto-detect)</label>
+    <div class="gps-map-wrap">
+      <iframe id="hMapFrame" src="" title="Building location" loading="lazy"></iframe>
+      <div class="gps-overlay" id="hMapOv" onclick="hDetectGPS()">
+        <div class="gps-ov-icon">&#127919;</div>
+        <div class="gps-ov-title">Tap to detect live location</div>
+        <div class="gps-ov-sub">Works for any building anywhere in India</div>
+      </div>
+    </div>
+    <button class="gps-btn-home" id="hGpsBtn" onclick="hDetectGPS()">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg>
+      Auto-detect my location via GPS
+    </button>
+    <div class="gps-status-home" id="hGpsSt"></div>
+    <div class="coord-detected" id="hCoordBox">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:5px">
+        <div class="cdot"></div>
+        <div style="font-size:12px;font-weight:700;color:#16a29e">Live GPS active</div>
+      </div>
+      <div style="font-size:13px;font-weight:700;color:#fff" id="hCoordVal">&#8212;</div>
+      <div style="font-size:11px;color:rgba(255,255,255,.55);margin-top:2px" id="hCoordAcc">&#8212;</div>
+    </div>
+
+    <!-- OPTIONAL MANUAL LAT/LNG -->
+    <div class="or-divider">&#8212; or enter coordinates manually &#8212;</div>
+    <div class="latlon-home">
+      <div>
+        <label class="home-inp-label">Latitude</label>
+        <input class="home-inp" id="hLat" type="number" step="0.00001" placeholder="e.g. 28.63500" oninput="hManualCoord()" style="margin-bottom:0">
+      </div>
+      <div>
+        <label class="home-inp-label">Longitude</label>
+        <input class="home-inp" id="hLng" type="number" step="0.00001" placeholder="e.g. 77.22500" oninput="hManualCoord()" style="margin-bottom:0">
+      </div>
+    </div>
+  </div>
+
+  <!-- GENERATE PLAN BUTTON -->
+  <button class="gen-btn" onclick="generatePlan()" style="width:100%;max-width:440px">
+    <svg style="width:20px;height:20px;fill:none;stroke:#fff;stroke-width:2;stroke-linecap:round" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>
+    Generate evacuation plan &#10132;
+  </button>
+
+  <!-- PREMIUM TEASER -->
+  <div class="prem-teaser" onclick="go('s4')" style="max-width:440px">
+    <div class="pt-title">&#11088; Full Access &#8212; &#8377;500 once &nbsp;&#183;&nbsp; Lifetime</div>
+    <div class="pt-grid">
+      <div class="pt-item">&#10003; AI evacuation routing</div>
+      <div class="pt-item">&#10003; Voice navigation</div>
+      <div class="pt-item">&#10003; Family live tracking</div>
+      <div class="pt-item">&#10003; Weather &amp; NDMA alerts</div>
+      <div class="pt-item">&#10003; 22 Indian languages</div>
+      <div class="pt-item">&#10003; Admin panel</div>
+    </div>
+  </div>
+  <div class="home-note">No login &#8226; No data sent to server &#8226; Works offline &#8226; Any building in India</div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     MAIN APP — after plan generated
+═══════════════════════════════════════ -->
+<div class="scr" id="s3">
+  <div class="topbar">
+    <div class="tb-icon"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg></div>
+    <div style="margin-left:8px;flex:1">
+      <div class="tb-name" id="tbName">SafeVac</div>
+      <div class="tb-sub" id="tbSub">Building safety</div>
+    </div>
+    <button class="prem-badge" id="premBadge" onclick="go('s4')">&#11088; Full access</button>
+  </div>
+  <div class="app-scroll">
+    <!-- MAP PANE -->
+    <div class="pane on" id="pMap">
+      <div class="bldg-map"><iframe id="mainMapFrame" src="" title="Building map" loading="lazy"></iframe><div class="map-badge" id="mapBadge">Your building</div></div>
+      <div class="info-pills">
+        <div class="pill"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg><div><div class="pill-label">Live GPS</div><div class="pill-val" id="liveGPS">Locating...</div></div><div class="live-dot"></div></div>
+        <div class="pill" style="flex:.9"><svg viewBox="0 0 24 24"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg><div><div class="pill-label">Nearest exit</div><div class="pill-val">Main (25m)</div></div></div>
+      </div>
+      <div class="sec-head">Evacuation exits</div>
+      <div class="exit-grid" id="exitGrid"></div>
+      <div class="sos-row">
+        <button class="sos-btn" id="sosBtn" onclick="trigSOS()"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>Emergency SOS</button>
+        <button class="drill-btn" onclick="doDrill()">&#9654; Drill</button>
+      </div>
+      <div class="sec-head">Assembly points</div>
+      <div class="asm-row" id="asmRow"></div>
+      <div style="padding:10px 14px 0"><button onclick="go('s0')" style="width:100%;background:#fff;color:var(--text);border:1.5px solid var(--border);border-radius:10px;padding:11px;font-size:12px;font-weight:600;cursor:pointer">&#8592; Change building</button></div>
+    </div>
+    <!-- FLOORS PANE -->
+    <div class="pane" id="pFloors">
+      <div class="floor-tabs" id="floorTabs"></div>
+      <div class="floor-svg" id="floorSVG"></div>
+      <div class="route-steps" id="routeSteps"></div>
+    </div>
+    <!-- EMERGENCY PANE -->
+    <div class="pane" id="pEmerg">
+      <div class="sec-head">Select emergency type</div>
+      <div class="em-chips">
+        <div class="em-chip on" onclick="selEm('fire',this)">&#128293; Fire</div>
+        <div class="em-chip" onclick="selEm('quake',this)">&#127757; Earthquake</div>
+        <div class="em-chip" onclick="selEm('flood',this)">&#127754; Flood</div>
+        <div class="em-chip" onclick="selEm('storm',this)">&#127786; Storm</div>
+        <div class="em-chip" onclick="selEm('bomb',this)">&#128163; Bomb</div>
+        <div class="em-chip" onclick="selEm('gas',this)">&#128169; Gas</div>
+        <div class="em-chip" onclick="selEm('collapse',this)">&#127959; Collapse</div>
+      </div>
+      <div id="emContent"></div>
+    </div>
+    <!-- CONTACTS PANE -->
+    <div class="pane" id="pContacts">
+      <div class="sec-head">National emergency numbers</div>
+      <div class="contact-list">
+        <div class="contact-row"><div class="c-icon" style="background:#fee2e2">&#128680;</div><div style="flex:1"><div class="c-name">Police</div><div class="c-num">112 &#8212; All India</div></div><a class="c-btn" href="tel:112">Call</a></div>
+        <div class="contact-row"><div class="c-icon" style="background:#fff7ed">&#128293;</div><div style="flex:1"><div class="c-name">Fire Brigade</div><div class="c-num">101 &#8212; All India</div></div><a class="c-btn" href="tel:101">Call</a></div>
+        <div class="contact-row"><div class="c-icon" style="background:#dcfce7">&#128657;</div><div style="flex:1"><div class="c-name">Ambulance</div><div class="c-num">108 &#8212; All India</div></div><a class="c-btn" href="tel:108">Call</a></div>
+        <div class="contact-row"><div class="c-icon" style="background:#eff6ff">&#128202;</div><div style="flex:1"><div class="c-name">NDRF</div><div class="c-num">1078</div></div><a class="c-btn" href="tel:1078">Call</a></div>
+        <div class="contact-row"><div class="c-icon" style="background:#f5f3ff">&#128105;</div><div style="flex:1"><div class="c-name">Women helpline</div><div class="c-num">1091</div></div><a class="c-btn" href="tel:1091">Call</a></div>
+        <div class="contact-row"><div class="c-icon" style="background:#fce7f3">&#128118;</div><div style="flex:1"><div class="c-name">Child helpline</div><div class="c-num">1098</div></div><a class="c-btn" href="tel:1098">Call</a></div>
+      </div>
+      <div class="sec-head">Building contact</div>
+      <div class="contact-list"><div class="contact-row"><div class="c-icon" style="background:#e1f5f5">&#127968;</div><div style="flex:1"><div class="c-name" id="bCName">&#8212;</div><div class="c-num" id="bCNum">Not set</div></div><a class="c-btn" id="bCBtn" href="#">Call</a></div></div>
+    </div>
+    <!-- MORE PANE -->
+    <div class="pane" id="pMore">
+      <div class="sec-head">Premium features</div>
+      <div class="more-grid">
+        <div class="more-card" onclick="oP('Air')"><span class="mc-icon">&#129302;</span><div class="mc-title">AI Route</div><div class="mc-desc">Smart evacuation</div></div>
+        <div class="more-card" onclick="oP('Voi')"><span class="mc-icon">&#127908;</span><div class="mc-title">Voice Nav</div><div class="mc-desc">Audio guide</div></div>
+        <div class="more-card" onclick="oP('Fam')"><span class="mc-icon">&#128205;</span><div class="mc-title">Family Track</div><div class="mc-desc">Live location</div></div>
+        <div class="more-card" onclick="oP('Wet')"><span class="mc-icon">&#127777;&#65039;</span><div class="mc-title">Alerts</div><div class="mc-desc">Weather &amp; NDMA</div></div>
+        <div class="more-card" onclick="oP('Ins')"><span class="mc-icon">&#128203;</span><div class="mc-title">Inspection</div><div class="mc-desc">Safety checklist</div></div>
+        <div class="more-card" onclick="oP('Lan')"><span class="mc-icon">&#128483;&#65039;</span><div class="mc-title">Languages</div><div class="mc-desc">22 Indian langs</div></div>
+        <div class="more-card" onclick="oP('Sos')"><span class="mc-icon">&#128680;</span><div class="mc-title">SOS Pro</div><div class="mc-desc">Multi-channel</div></div>
+        <div class="more-card" onclick="swT('Settings',document.querySelectorAll('.tab')[4])"><span class="mc-icon">&#9881;&#65039;</span><div class="mc-title">Settings</div><div class="mc-desc">Building &amp; account</div></div>
+      </div>
+      <div style="padding:10px 14px 0">
+        <div style="background:linear-gradient(135deg,var(--navy),#1a3558);border-radius:14px;padding:15px 16px;display:flex;align-items:center;gap:12px;cursor:pointer" onclick="go('s4')">
+          <div style="font-size:28px">&#11088;</div>
+          <div style="flex:1"><div style="font-size:14px;font-weight:700;color:#fff">Unlock all &#8212; &#8377;500 once</div><div style="font-size:11px;color:rgba(255,255,255,.45);margin-top:2px">Lifetime access, no renewal</div></div>
+          <div style="color:#fff;font-size:20px">&#8594;</div>
+        </div>
+      </div>
+      <!-- PREMIUM PANES -->
+      <div class="pp" id="ppAir">
+        <div class="back-row"><button class="bk" onclick="cP('ppAir')">&#8592;</button><div class="pt">AI Evacuation Routing</div></div>
+        <div style="display:flex;gap:8px;padding:8px 14px 0">
+          <select id="aiF" onchange="bAI()" style="flex:1;background:#fff;border:1.5px solid var(--border);border-radius:9px;padding:9px 10px;font-size:13px;color:var(--text);outline:none">
+            <option value="0">Ground floor</option><option value="1">1st floor</option><option value="2">2nd floor</option><option value="3">3rd floor</option><option value="4">4th floor</option>
+          </select>
+          <select id="aiE" onchange="bAI()" style="flex:1;background:#fff;border:1.5px solid var(--border);border-radius:9px;padding:9px 10px;font-size:13px;color:var(--text);outline:none">
+            <option value="fire">&#128293; Fire</option><option value="quake">&#127757; Earthquake</option><option value="flood">&#127754; Flood</option><option value="bomb">&#128163; Bomb</option><option value="gas">&#128169; Gas</option>
+          </select>
+        </div>
+        <div class="sec-head">AI-generated route</div>
+        <div class="ai-card" id="aiCard"></div>
+        <div style="padding:8px 14px 0;display:flex;gap:8px">
+          <button onclick="sVoice()" class="xbtn" style="flex:1;background:var(--teal)">&#127908; Voice</button>
+          <button onclick="nStep()" class="xbtn" style="flex:1;background:var(--navy)">Next &#8594;</button>
+        </div>
+      </div>
+      <div class="pp" id="ppVoi">
+        <div class="back-row"><button class="bk" onclick="cP('ppVoi')">&#8592;</button><div class="pt">Voice Navigation</div></div>
+        <div class="vbox" style="margin-top:8px"><div class="wv" id="wvBars"><span></span><span></span><span></span><span></span><span></span></div><div class="vt" id="vText">Tap Start to begin</div></div>
+        <div style="padding:8px 14px 0;display:flex;gap:8px">
+          <button onclick="sVoice()" class="xbtn" style="flex:1;background:var(--teal)">&#9654; Start</button>
+          <button onclick="stVoice()" class="xbtn" style="flex:1;background:var(--red)">&#9646;&#9646; Stop</button>
+          <button onclick="nStep()" class="xbtn" style="flex:1;background:var(--navy)">Next &#8594;</button>
+        </div>
+        <div class="sec-head">Route steps</div>
+        <div class="ai-card" id="vCard"></div>
+      </div>
+      <div class="pp" id="ppFam">
+        <div class="back-row"><button class="bk" onclick="cP('ppFam')">&#8592;</button><div class="pt" style="flex:1">Family Tracking</div><button onclick="aFM()" style="background:var(--navy);color:#fff;border:none;border-radius:8px;padding:6px 12px;font-size:12px;font-weight:700;cursor:pointer">+ Add</button></div>
+        <div class="sec-head">Family members</div>
+        <div class="fm-list" id="fmList"></div>
+        <div style="padding:8px 14px 0"><button onclick="shLoc()" class="xbtn" style="background:var(--teal);width:100%">&#128205; Share my live location</button></div>
+      </div>
+      <div class="pp" id="ppWet">
+        <div class="back-row"><button class="bk" onclick="cP('ppWet')">&#8592;</button><div class="pt">Weather &amp; Alerts</div></div>
+        <div class="wh" id="wtHero" style="background:linear-gradient(135deg,#0ea5e9,#0284c7)">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start">
+            <div><div class="wt" id="wtTemp">34&#176;C</div><div class="wd" id="wtDesc">Partly cloudy</div><div style="font-size:11px;color:rgba(255,255,255,.65);margin-top:3px" id="wtLoc">Your location</div></div>
+            <div style="font-size:52px" id="wtEmoji">&#9928;&#65039;</div>
+          </div>
+          <div class="ws"><div><div class="wsv" id="wtHum">62%</div><div class="wsl">Humidity</div></div><div><div class="wsv" id="wtWind">14 km/h</div><div class="wsl">Wind</div></div><div><div class="wsv" id="wtFeel">38&#176;C</div><div class="wsl">Feels like</div></div></div>
+        </div>
+        <div id="wtAlerts"></div>
+      </div>
+      <div class="pp" id="ppIns">
+        <div class="back-row"><button class="bk" onclick="cP('ppIns')">&#8592;</button><div class="pt" style="flex:1">Safety Inspection</div><div id="inspSc" style="font-size:12px;font-weight:700;color:var(--teal)">0/10</div></div>
+        <div class="sec-head">Safety checklist</div>
+        <div style="padding:0 14px;display:flex;flex-direction:column;gap:7px" id="clItems"></div>
+      </div>
+      <div class="pp" id="ppLan">
+        <div class="back-row"><button class="bk" onclick="cP('ppLan')">&#8592;</button><div class="pt">22 Languages</div></div>
+        <div class="sec-head">Select language</div>
+        <div class="lg" id="langGrid"></div>
+        <div class="lp" id="langPrev"></div>
+      </div>
+      <div class="pp" id="ppSos">
+        <div class="back-row"><button class="bk" onclick="cP('ppSos')">&#8592;</button><div class="pt">SOS Pro</div></div>
+        <div class="sec-head">Select channels</div>
+        <div class="sch-g" id="sosCh"></div>
+        <div style="padding:10px 14px 0"><button onclick="tSP()" class="xbtn" style="background:var(--red);font-size:16px;width:100%">&#128680; Send SOS to all channels</button></div>
+        <div class="sec-head">SOS history</div>
+        <div class="sh" id="sosHist"><div style="font-size:12px;color:var(--muted)">No SOS sent yet</div></div>
+      </div>
+    </div>
+    <!-- SETTINGS PANE -->
+    <div class="pane" id="pSettings">
+      <div class="sec-head">Your building</div>
+      <div class="bic"><div style="font-size:15px;font-weight:700;color:var(--text);margin-bottom:5px" id="sName">&#8212;</div><div style="font-size:13px;color:#555;margin-bottom:3px" id="sAddr">&#8212;</div><div style="font-size:11px;color:var(--muted);margin-bottom:2px" id="sGPS">&#8212;</div><div style="font-size:11px;color:var(--muted)" id="sInfo">&#8212;</div></div>
+      <div class="pu"><div class="put">&#11088; Full Access</div><div class="pud">AI routing, voice navigation, family tracking, 22 languages, admin panel &#8212; &#8377;500 once, lifetime.</div><button class="pub" onclick="go('s4')">Get full access &#8212; &#8377;500</button></div>
+      <div style="padding:10px 14px 0;display:flex;flex-direction:column;gap:8px">
+        <button onclick="go('s0')" style="width:100%;background:#fff;color:var(--text);border:1.5px solid var(--border);border-radius:10px;padding:12px;font-size:13px;font-weight:600;cursor:pointer">Change building</button>
+        <button onclick="rApp()" style="width:100%;background:#fee2e2;color:#991b1b;border:1px solid #fca5a5;border-radius:10px;padding:11px;font-size:12px;font-weight:600;cursor:pointer">Reset app data</button>
+      </div>
+    </div>
+  </div>
+  <div class="tabs">
+    <div class="tab on" onclick="swT('Map',this)"><svg viewBox="0 0 24 24"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/></svg><span>Map</span></div>
+    <div class="tab" onclick="swT('Floors',this)"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/></svg><span>Floors</span></div>
+    <div class="tab" onclick="swT('Emerg',this)"><svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/></svg><span>Emergency</span></div>
+    <div class="tab" onclick="swT('Contacts',this)"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07M1 1l22 22"/></svg><span>Contacts</span></div>
+    <div class="tab" onclick="swT('More',this)"><svg viewBox="0 0 24 24"><circle cx="5" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/></svg><span>More</span></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     PAYMENT SCREEN
+═══════════════════════════════════════ -->
+<div class="scr" id="s4">
+  <div class="ph"><h2>&#11088; Full Access &#8212; &#8377;500</h2><p>One-time &#8226; Lifetime &#8226; No renewal ever</p></div>
+  <div class="pb">
+    <div class="bc">
+      <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:12px">What you unlock</div>
+      <div class="bi"><div class="tk"><svg viewBox="0 0 12 12"><polyline points="2 6 5 9 10 3"/></svg></div>AI evacuation routing with voice navigation in Hindi &amp; English</div>
+      <div class="bi"><div class="tk"><svg viewBox="0 0 12 12"><polyline points="2 6 5 9 10 3"/></svg></div>Family live location tracking + SOS to each member</div>
+      <div class="bi"><div class="tk"><svg viewBox="0 0 12 12"><polyline points="2 6 5 9 10 3"/></svg></div>Admin panel &#8212; manage multiple buildings</div>
+      <div class="bi"><div class="tk"><svg viewBox="0 0 12 12"><polyline points="2 6 5 9 10 3"/></svg></div>School / college drill module and visitor register</div>
+      <div class="bi"><div class="tk"><svg viewBox="0 0 12 12"><polyline points="2 6 5 9 10 3"/></svg></div>Building safety inspection checklist + PDF reports</div>
+      <div class="bi"><div class="tk"><svg viewBox="0 0 12 12"><polyline points="2 6 5 9 10 3"/></svg></div>22 Indian languages &#8212; Hindi, Tamil, Bengali, Telugu + 18 more</div>
+      <div class="bi"><div class="tk"><svg viewBox="0 0 12 12"><polyline points="2 6 5 9 10 3"/></svg></div>NDMA and IMD live disaster and weather alerts</div>
+    </div>
+    <div class="pc">
+      <div class="ptop"><div><div class="pamt">&#8377;500</div><div class="pwas">&#8377;2,000</div><div class="psav">75% off &#8212; launch offer</div></div><div class="pbdg">&#10003; Lifetime<br>No renewal</div></div>
+      <div class="qrs">
+        <div class="qrl">Scan QR to pay &#8377;500</div>
+        <div class="qrb"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAjoAAAI6AQAAAAAGM99tAAAFvElEQVR4nO2dTYrkOBCFX4wTcilDHSCPYt+gjtTUkfoG1lHqAAX2MsHmzSL0l9UNPVBORjP1tChwyv0hQ7QIvfiREaeM+Nc5HEAggQQSSCCBBBJIIIH+LyBL4wIAhyHmH4DNzF+ZtwsQR8Bmf8zvzM9YkUACnQKaSJIrYGZXYuLuv5vddiCOh/HtdjdguyBb+0CS5CPotBUJJNApoC1tvlyQzJtLIAEMBLYr7cf7lZhWAAjF7n2Xf8qKBBLoK+Py+5/DCmAzMM4XN2MCOxBfdzCOHyC2J61IIIFOGe5RTCuAaR3cJSG5+wS5AgAGcsFAINSJIe3oE0ku/X2aQAIBCGRyRMaBNmOgzTiyO70CNocdmN4vQMw+CJn98Z4/TaDvDHIxZASSJ+0HxSttRhJD3KiBgfZjBWzGkeWTp6xIIIG+NHz3bULs8bYnJzre0oacferDGG93/wOEx7h8f58m0LcGNSdIAwDG2cA4D/4bsR3mk3EcdkMor28jCBwXnrwigQQ6ZfBxNBNL2IGJO/y0OK0D3R+nnzTLo06QAvUHaiWQaQVcApnI8mdPcZylCCRVQ1lyuEaWLVBnIPdGbPoJMPnbhxHbCMbx48KYT4jmE+HDEG87DIGwaX05fUUCCXTKqHt2I2WnrRnuiNR9vE4AgclDkZ4tUIegcoIcdpsWAvF1ZYpBYtgN4W6YeBijAUT4MGJLJ00ARVfp79ME+tag7I0sd4PbLgDzXRkAsF0JbKM/GHAB4isBYNgBKFIjUJ+goo0kHSRJIHg8HoYcgK//wpWTFZA3IlDPoO1KLtuVfBtTwp+n9MWcs823cXB7thlHzsoOymIVqE9QzogqCh/y/pzMG4DnQaVjZI5LLmVCqp9AHYKyYQJNQCYJJEX9QJ5NrzyoJLJsgXoElT07BWSqpJdSWdci/YVUiNBk+En1E6hXULtnL9lsU4CxRNIXAO52J2+k9Utk2QL1CEp7dnKYd2Qbz7NL2EsGSXqvhnDkZwvULehzrl/+M+wAjosBFxhwpavd8XUgsPl7Xpdw9ooEEuhEUBGmaxU7sF2yh1JmsZkh3rKa4hUKT1mRQAKdAvIimtJyIXhtQampyQL2xKRnZ6M+VFMjUMegWr5b7dn37JSsCvDNzBBHIEXcQxuw7PfTBPqmoFb185HDilUlaUbzHgDp2QJ1C2p6LDQqiSsiqPGZoqGUuoRyeJRlC9QjqFH9fnnMMcgcmknlYW1fklWWLVDPoFQKFna0cgfgLf3SK+FuqEfGeCO9j8NTViSQQF8cyRthjsB4tkj5zdtDhfIY6nt77iqlPVug/kCt+1H85yZByt2PbNT1v0ETdld0XaAOQeVkmIeHa0rofEEx4BVNClSTmi3LFqhD0EMWa3E/SjZf8r1DMeWiYtcNXt6IQB2CGj27Telb0WjXVfBruoykVCnKsgXqEvRQ1cg6Uurfg41/asiQCfJGBOoWZDMGctkubVfWmAsfEcfHjsI+SuL2M1YkkEBfHPUEmXzqUlbQ1BbUmpomPxvtLq89W6C+QMUbYdO0Dyl0Xu35N7kkIUt/smyBOgR91kYaByN50o8lvSzJIytUBylQ7yCb/Qqxx1s63PM4zJuOTGvJys6+9xNXJJBAXxx8HDXdqelY2fYgRu4lVcRCeSMCdQhKff3S07AD4W5EYCmGLD2It2FPr2CgYXvZUXoQ9/hpAn1rUNMj6lM5uk83XeAfwuk1Cq89W6CeQVu5QB3pGnYAA/k2HmY2DoQnsHqiq/nV7FAdpED/FVAtD2u6jKTD45Vtht86kG+3UjTZ/6cJ9K1Av9zhW+5danP9PuVi52BOc/KUNyJQX6BcQBMI+LWPHmIH/KbTiYBN71cacBimny97vp1moN+zd/KKBBLoRFBzh2/dlVcAybu+e//sXC95WI3o2PyUFQkk0JeG8c/v/JMR+/s0gQQSSCCBBBJIIIEE+tdAfwOGtloevP17mQAAAABJRU5ErkJggg==" alt="UPI QR pay 500"></div>
+        <div class="qrc">Scan with any UPI app &#8226; &#8377;500 pre-filled<br><strong>Parinishtha Sharma &#10003; 7678337699@ptsbi</strong></div>
+      </div>
+      <div class="uidr">
+        <div style="flex:1"><div style="font-size:10px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.4px">UPI ID</div><div class="uid">7678337699@ptsbi</div></div>
+        <button class="cpb" id="cpb" onclick="cpUPI()">Copy</button>
+      </div>
+      <a class="umb" href="upi://pay?pa=7678337699@ptsbi&pn=SafeVac&am=500&cu=INR&tn=SafeVac+Full+Access">
+        <svg style="width:20px;height:20px;fill:none;stroke:#fff;stroke-width:2;stroke-linecap:round" viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+        Pay &#8377;500 via UPI &#8212; tap here
+      </a>
+      <div class="al">Or choose your app</div>
+      <div class="ag">
+        <a class="aa" href="upi://pay?pa=7678337699@ptsbi&pn=SafeVac&am=500&cu=INR&tn=SafeVac+Full+Access">
+          <div class="alogo" style="background:#fff;border:1px solid #e4eaf2;padding:4px">
+            <svg width="32" height="32" viewBox="0 0 48 48"><path d="M43.6 20H24v8h11.3c-1.1 4.4-5.1 7.5-11.3 7.5C17 35.5 11.5 30 11.5 24S17 12.5 24 12.5c3.1 0 5.9 1.1 8 3l5.7-5.7C34.4 7.1 29.5 5 24 5 13.5 5 5 13.5 5 24S13.5 43 24 43c10.8 0 18.3-7.6 18.3-18.3 0-1.2-.1-2.5-.7-4.7z" fill="#4285F4"/><path d="M6.3 14.7l6.6 4.8C14.5 16 19 12.5 24 12.5c3.1 0 5.9 1.1 8 3l5.7-5.7C34.4 7.1 29.5 5 24 5 16.3 5 9.7 8.9 6.3 14.7z" fill="#EA4335"/><path d="M24 43c5.4 0 10.2-1.9 13.9-5.1l-6.4-5.4c-2 1.4-4.7 2.3-7.5 2.3-6.1 0-11.2-4.1-13-9.7l-6.5 5C7.8 38.6 15.4 43 24 43z" fill="#34A853"/><path d="M43.3 20H24v8h11.3c-.5 2.3-1.8 4.2-3.7 5.6l6.4 5.4c3.7-3.5 6-8.7 6-15 0-1.2-.2-2.5-.7-4z" fill="#FBBC05"/></svg>
+          </div>
+          <div><span class="an">Google Pay</span><span class="ah">Tap &#8594; &#8377;500</span></div>
+        </a>
+        <a class="aa" href="upi://pay?pa=7678337699@ptsbi&pn=SafeVac&am=500&cu=INR&tn=SafeVac+Full+Access">
+          <div class="alogo" style="background:#5f259f">
+            <svg width="32" height="32" viewBox="0 0 100 100"><rect width="100" height="100" rx="20" fill="#5f259f"/><path d="M56 17H32v19h18c5 0 9-4 9-9v-1c0-5-4-9-9-9z" fill="white"/><path d="M56 44H32v17h18c5 0 9-4 9-9v-1c0-5-4-9-9-9z" fill="white" opacity=".8"/><path d="M32 69v14l12-14z" fill="white" opacity=".6"/></svg>
+          </div>
+          <div><span class="an">PhonePe</span><span class="ah">Tap &#8594; &#8377;500</span></div>
+        </a>
+        <a class="aa" href="upi://pay?pa=7678337699@ptsbi&pn=SafeVac&am=500&cu=INR&tn=SafeVac+Full+Access">
+          <div class="alogo" style="background:#002970">
+            <svg width="32" height="32" viewBox="0 0 100 100"><rect width="100" height="100" rx="16" fill="#002970"/><text x="10" y="48" font-family="Arial Black,sans-serif" font-weight="900" font-size="28" fill="white">Pay</text><text x="10" y="78" font-family="Arial Black,sans-serif" font-weight="900" font-size="28" fill="#00BAF2">tm</text></svg>
+          </div>
+          <div><span class="an">Paytm</span><span class="ah">Tap &#8594; &#8377;500</span></div>
+        </a>
+        <a class="aa" href="upi://pay?pa=7678337699@ptsbi&pn=SafeVac&am=500&cu=INR&tn=SafeVac+Full+Access">
+          <div class="alogo" style="background:#00529c">
+            <svg width="32" height="32" viewBox="0 0 100 100"><rect width="100" height="100" rx="16" fill="#00529c"/><text x="8" y="40" font-family="Arial Black,sans-serif" font-weight="900" font-size="22" fill="white">BHIM</text><text x="8" y="65" font-family="Arial Black,sans-serif" font-weight="900" font-size="22" fill="#f7a800">UPI</text><rect x="8" y="72" width="84" height="5" rx="2" fill="#f7a800"/></svg>
+          </div>
+          <div><span class="an">BHIM UPI</span><span class="ah">Tap &#8594; &#8377;500</span></div>
+        </a>
+      </div>
+      <div class="acb">
+        <div class="act">After paying &#8212; activate here</div>
+        <div class="acs">Enter transaction ID or mobile number you paid from, or tap the green button.</div>
+        <input class="txni" id="txnI" placeholder="e.g. 9876543210 or T2506XXXXXX" onkeydown="if(event.key==='Enter')doAct()">
+        <button class="actn" onclick="doAct()"><svg style="width:18px;height:18px;fill:none;stroke:#fff;stroke-width:2.5;stroke-linecap:round" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Activate full access</button>
+        <button onclick="doAct('b')" class="byp">&#9989; I already paid &#8377;500 &#8212; activate now</button>
+      </div>
+    </div>
+    <button onclick="go('s3')" style="width:100%;background:none;border:none;color:var(--muted);font-size:13px;cursor:pointer;padding:10px;text-decoration:underline">&#8592; Back to app</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     SUCCESS SCREEN
+═══════════════════════════════════════ -->
+<div class="scr" id="s5">
+  <div style="display:flex;flex-direction:column;align-items:center;padding:48px 20px;text-align:center">
+    <div style="width:80px;height:80px;background:#dcfce7;border-radius:50%;display:flex;align-items:center;justify-content:center;margin-bottom:18px;font-size:36px">&#9989;</div>
+    <div style="font-family:Space Grotesk,sans-serif;font-size:28px;font-weight:800;color:var(--text);margin-bottom:8px">Full access unlocked!</div>
+    <div style="font-size:14px;color:#555;margin-bottom:26px;line-height:1.75;max-width:320px">All premium features are now active. Lifetime &#8212; no renewal.</div>
+    <div style="width:100%;max-width:420px;background:#fff;border-radius:16px;padding:18px;border:1px solid var(--border);margin-bottom:22px;text-align:left">
+      <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:14px">&#11088; Now active &#8212; tap from More tab</div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div style="display:flex;gap:11px;align-items:center"><div style="font-size:22px">&#129302;</div><div><div style="font-size:13px;font-weight:600;color:var(--text)">AI Evacuation Routing</div><div style="font-size:11px;color:#555">Smart route for your floor + emergency type</div></div></div>
+        <div style="display:flex;gap:11px;align-items:center"><div style="font-size:22px">&#127908;</div><div><div style="font-size:13px;font-weight:600;color:var(--text)">Voice Navigation</div><div style="font-size:11px;color:#555">Hindi &amp; English audio step-by-step guide</div></div></div>
+        <div style="display:flex;gap:11px;align-items:center"><div style="font-size:22px">&#128205;</div><div><div style="font-size:13px;font-weight:600;color:var(--text)">Family Live Tracking</div><div style="font-size:11px;color:#555">GPS + SOS to each family member</div></div></div>
+        <div style="display:flex;gap:11px;align-items:center"><div style="font-size:22px">&#127777;&#65039;</div><div><div style="font-size:13px;font-weight:600;color:var(--text)">NDMA &amp; IMD Alerts</div><div style="font-size:11px;color:#555">Live disaster and weather warnings</div></div></div>
+        <div style="display:flex;gap:11px;align-items:center"><div style="font-size:22px">&#128483;&#65039;</div><div><div style="font-size:13px;font-weight:600;color:var(--text)">22 Indian Languages</div><div style="font-size:11px;color:#555">Hindi, Tamil, Bengali, Telugu + 18 more</div></div></div>
+        <div style="display:flex;gap:11px;align-items:center"><div style="font-size:22px">&#128680;</div><div><div style="font-size:13px;font-weight:600;color:var(--text)">SOS Pro</div><div style="font-size:11px;color:#555">Alert Police, Fire, Family, NDRF at once</div></div></div>
+      </div>
+    </div>
+    <button onclick="go('s3')" style="width:100%;max-width:420px;background:var(--teal);color:#fff;border:none;border-radius:13px;padding:17px;font-size:16px;font-weight:800;cursor:pointer;font-family:Space Grotesk,sans-serif">Open SafeVac &#10132;</button>
+  </div>
+</div>
+
+<script>
+var B={name:'',addr:'',lat:0,lng:0,type:'school',floors:3,occ:500,phone:''};
+var cLat=0,cLng=0,bType='school',sosOn=false;
+var paid=false,aiSteps=[],aiIdx=0,vTimer=null,fmArr=[],sosChs={},sosLog=[],curLang='hi';
+
+function go(id){document.querySelectorAll('.scr').forEach(function(s){s.classList.remove('on');});var e=document.getElementById(id);if(e){e.classList.add('on');window.scrollTo(0,0);}}
+function swT(n,el){document.querySelectorAll('.pane').forEach(function(p){p.classList.remove('on');});document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('on');});var p=document.getElementById('p'+n);if(p)p.classList.add('on');if(el)el.classList.add('on');}
+function showSP(t){var s=document.getElementById('SP');if(s)s.classList.add('on');var tx=document.getElementById('SPT');if(tx)tx.textContent=t||'Loading...';}
+function hideSP(){var s=document.getElementById('SP');if(s)s.classList.remove('on');}
+function toast(m,d){var t=document.getElementById('TST');t.textContent=m;t.classList.add('on');clearTimeout(t._t);t._t=setTimeout(function(){t.classList.remove('on');},d||2800);}
+
+/* HOME SETUP */
+function hSelT(el){document.querySelectorAll('.hto').forEach(function(o){o.classList.remove('on');});el.classList.add('on');bType=el.dataset.t;}
+function chFL(d){var e=document.getElementById('flV');e.textContent=Math.min(30,Math.max(1,parseInt(e.textContent)+d));}
+
+function hDetectGPS(){
+  var btn=document.getElementById('hGpsBtn');
+  var st=document.getElementById('hGpsSt');
+  var ov=document.getElementById('hMapOv');
+  var cb=document.getElementById('hCoordBox');
+  var cv=document.getElementById('hCoordVal');
+  var ca=document.getElementById('hCoordAcc');
+  st.className='gps-status-home';st.textContent='Detecting your live GPS location...';st.style.display='block';
+  if(btn){btn.textContent='Detecting... please wait';btn.style.opacity='.65';}
+  if(!navigator.geolocation){st.className='gps-status-home gps-err-home';st.textContent='GPS not supported. Enter latitude and longitude manually below.';if(btn){btn.textContent='Auto-detect my location via GPS';btn.style.opacity='1';}return;}
+  navigator.geolocation.getCurrentPosition(function(p){
+    var la=p.coords.latitude,ln=p.coords.longitude,acc=Math.round(p.coords.accuracy);
+    cLat=la;cLng=ln;
+    document.getElementById('hLat').value=la.toFixed(5);
+    document.getElementById('hLng').value=ln.toFixed(5);
+    st.className='gps-status-home gps-ok-home';st.textContent='\u2713 Live GPS detected!';
+    if(cb)cb.style.display='block';
+    if(cv)cv.textContent=la.toFixed(5)+'\u00b0N \u2022 '+ln.toFixed(5)+'\u00b0E';
+    if(ca)ca.textContent='Accuracy: \u00b1'+acc+' metres';
+    if(ov)ov.style.display='none';
+    var fr=document.getElementById('hMapFrame');
+    if(fr)fr.src='https://maps.google.com/maps?q='+la+','+ln+'&z=18&output=embed&hl=en';
+    if(btn){btn.innerHTML='\u25cf Live GPS active \u2713';btn.style.background='rgba(22,163,74,.6)';btn.style.opacity='1';}
+    toast('\u2713 Location: '+la.toFixed(5)+'N, '+ln.toFixed(5)+'E');
+  },function(err){
+    var m=err.code===1?'Allow location access in browser/phone settings, then tap again.':err.code===2?'Location unavailable. Enter coordinates manually below.':'Timed out. Try again.';
+    st.className='gps-status-home gps-err-home';st.textContent=m;
+    if(btn){btn.textContent='Auto-detect my location via GPS';btn.style.opacity='1';btn.style.background='';}
+  },{enableHighAccuracy:true,timeout:15000,maximumAge:0});
+}
+
+function hManualCoord(){
+  var la=parseFloat(document.getElementById('hLat').value);
+  var ln=parseFloat(document.getElementById('hLng').value);
+  if(isNaN(la)||isNaN(ln))return;
+  cLat=la;cLng=ln;
+  document.getElementById('hMapOv').style.display='none';
+  document.getElementById('hMapFrame').src='https://maps.google.com/maps?q='+la+','+ln+'&z=18&output=embed&hl=en';
+  var cb=document.getElementById('hCoordBox'),cv=document.getElementById('hCoordVal');
+  if(cb)cb.style.display='block';
+  if(cv)cv.textContent=la.toFixed(5)+'\u00b0N \u2022 '+ln.toFixed(5)+'\u00b0E';
+}
+
+function generatePlan(){
+  var nm=document.getElementById('hNm').value.trim();
+  var ad=document.getElementById('hAd').value.trim();
+  var la=parseFloat(document.getElementById('hLat').value);
+  var ln=parseFloat(document.getElementById('hLng').value);
+  var fl=parseInt(document.getElementById('flV').textContent);
+  var ph=document.getElementById('hPh').value.trim();
+  if(!nm){toast('Please enter your building name');return;}
+  if(isNaN(la)||isNaN(ln)||(la===0&&ln===0)){toast('Please detect GPS or enter latitude/longitude');return;}
+  B={name:nm,addr:ad,lat:la,lng:ln,type:bType,floors:fl,occ:500,phone:ph};
+  cLat=la;cLng=ln;
+  try{localStorage.setItem('sv_b',JSON.stringify(B));}catch(e){}
+  buildApp();go('s3');toast(nm+' \u2014 evacuation plan ready!');
+}
+
+function buildApp(){
+  document.getElementById('tbName').textContent=B.name;
+  document.getElementById('tbSub').textContent=B.addr||'SafeVac India';
+  document.getElementById('mapBadge').textContent=B.name;
+  document.getElementById('mainMapFrame').src='https://maps.google.com/maps?q='+B.lat+','+B.lng+'&z=17&output=embed&hl=en';
+  document.getElementById('sName').textContent=B.name;
+  document.getElementById('sAddr').textContent=B.addr||'\u2014';
+  document.getElementById('sGPS').textContent='GPS: '+B.lat.toFixed(5)+'\u00b0N \u00b7 '+B.lng.toFixed(5)+'\u00b0E';
+  document.getElementById('sInfo').textContent=B.floors+' floors \u00b7 '+B.type;
+  if(B.phone){document.getElementById('bCName').textContent=B.name+' emergency';document.getElementById('bCNum').textContent=B.phone;document.getElementById('bCBtn').href='tel:'+B.phone;}
+  buildExits();buildASM();buildFloors();selEm('fire',document.querySelector('.em-chip'));watchGPS();
+  if(paid){var b=document.getElementById('premBadge');if(b){b.style.background='#166634';b.innerHTML='\u2B50 Full access \u2713';}}
+}
+
+function buildExits(){var ex=[{n:'Main exit (North)',d:'25m',t:'Primary'},{n:'Side exit (West)',d:'45m',t:'Clear'},{n:'Rear exit (South)',d:'70m',t:'Alternate'},{n:'Fire exit (East)',d:'90m',t:'Backup'}];document.getElementById('exitGrid').innerHTML=ex.map(function(e,i){return '<div class="exit-card'+(i===0?' on':'')+'" onclick="pEx(this)"><div class="exit-name">'+e.n+'</div><div class="exit-dist">'+e.d+' away</div><span class="exit-tag">'+e.t+'</span></div>';}).join('');}
+function pEx(el){document.querySelectorAll('.exit-card').forEach(function(e){e.classList.remove('on');});el.classList.add('on');}
+function buildASM(){document.getElementById('asmRow').innerHTML='<div class="asm"><div class="asm-name">Point A \u2014 Front</div><div class="asm-cap">Capacity 300</div></div><div class="asm"><div class="asm-name">Point B \u2014 Rear</div><div class="asm-cap">Capacity 200</div></div>';}
+function buildFloors(){
+  var tabs=document.getElementById('floorTabs');tabs.innerHTML='';
+  for(var i=0;i<B.floors;i++){var lbl=i===0?'Ground':(i+'F');var t=document.createElement('div');t.className='ftab'+(i===0?' on':'');t.textContent=lbl;t.onclick=(function(idx,el){return function(){document.querySelectorAll('.ftab').forEach(function(x){x.classList.remove('on');});el.classList.add('on');drawFloor(idx);};})(i,t);tabs.appendChild(t);}
+  drawFloor(0);
+}
+function drawFloor(idx){
+  var g=idx===0,W=440,H=255;
+  var rooms=[[20,18,112,56,g?'Reception':'Rm'+idx+'A'],[148,18,115,56,g?'Office':'Rm'+idx+'B'],[278,18,143,56,g?'Main Hall':'Rm'+idx+'C'],[20,92,112,68,'Rm'+idx+'D'],[148,92,115,68,'Rm'+idx+'E'],[278,92,143,68,'Rm'+idx+'F'],[20,178,112,58,g?'Security':'Rm'+idx+'G'],[148,178,115,58,g?'Lobby':'Rm'+idx+'H'],[278,178,143,58,g?'EXIT':'Terrace']];
+  var svg='<svg viewBox="0 0 '+W+' '+H+'" xmlns="http://www.w3.org/2000/svg"><rect width="'+W+'" height="'+H+'" fill="#e8eef2"/>';
+  [[0,80,440,14],[0,168,440,14],[131,0,14,255],[275,0,14,255]].forEach(function(c){svg+='<rect x="'+c[0]+'" y="'+c[1]+'" width="'+c[2]+'" height="'+c[3]+'" fill="#d8e2ee"/>';});
+  rooms.forEach(function(r){var ex=r[4]==='EXIT';svg+='<rect x="'+r[0]+'" y="'+r[1]+'" width="'+r[2]+'" height="'+r[3]+'" rx="4" fill="'+(ex?'#dcfce7':'#f8fafc')+'" stroke="'+(ex?'#16a34a':'#94a3b8')+'" stroke-width="1.5"/><text x="'+(r[0]+r[2]/2)+'" y="'+(r[1]+r[3]/2)+'" text-anchor="middle" dominant-baseline="middle" font-size="9" fill="'+(ex?'#166634':'#1e3a5f')+'" font-family="Inter,sans-serif" font-weight="'+(ex?'700':'400')+'">'+r[4]+'</text>';});
+  var route=g?'218,126 218,80 131,80 60,80 60,55':'218,126 131,126 131,80 60,80 60,0';
+  svg+='<defs><marker id="ah" markerWidth="7" markerHeight="7" refX="3.5" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#0f7173"/></marker></defs>';
+  svg+='<polyline points="'+route+'" fill="none" stroke="#0f7173" stroke-width="3.5" stroke-linecap="round" stroke-dasharray="8,4" marker-end="url(#ah)"/>';
+  svg+='<circle cx="218" cy="126" r="10" fill="#e85d04" stroke="white" stroke-width="2.5"/><text x="218" y="148" text-anchor="middle" font-size="9" fill="#e85d04" font-family="Inter,sans-serif" font-weight="700">YOU</text></svg>';
+  document.getElementById('floorSVG').innerHTML=svg;
+  var lbl=idx===0?'Ground floor':(idx+(idx===1?'st':idx===2?'nd':idx===3?'rd':'th')+' floor');
+  var steps=g?['Exit your room immediately','Follow EXIT signs to main corridor','Stay low if smoke present','NEVER use lift \u2014 stairs only','Exit through main door (North)','Go to Assembly Point A \u2014 50m front']:['Exit room \u2014 close door','Find nearest staircase \u2014 never lift','Hold banister \u2014 descend calmly','Ground floor \u2014 follow EXIT signs','Exit main door','Assembly Point A or B'];
+  document.getElementById('routeSteps').innerHTML='<div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:10px">'+lbl+' \u2014 evacuation route</div>'+steps.map(function(s,i){return '<div class="rs"><div class="rsn">'+(i+1)+'</div><div>'+s+'</div></div>';}).join('');
+}
+
+var EMD={
+  fire:{bg:'#7f1d1d',t:'Fire emergency',s:'Stay low \u00b7 No lifts \u00b7 Exit NOW',steps:[['01','Raise alarm','Shout FIRE or break glass alarm'],['02','Stay low','Crawl below smoke. Wet cloth on nose.'],['03','Stairs only','NEVER use lift. Nearest staircase.'],['04','Feel door','If hot, do not open.'],['05','Assembly','Exit and go to assembly point.'],['06','Call 101','Fire Brigade \u2014 give full address.']],dos:['Use extinguisher on small fire','Feel door before opening','Headcount at assembly','Call Fire 101'],donts:['Use lift','Go back for belongings','Open hot door','Leave until cleared'],nums:[{bg:'#1e3a8a',n:'112',l:'Police 112'},{bg:'#7f1d1d',n:'101',l:'Fire 101'},{bg:'#065f46',n:'108',l:'Ambulance 108'}]},
+  quake:{bg:'#78350f',t:'Earthquake',s:'Drop \u00b7 Cover \u00b7 Hold On',steps:[['01','Drop-Cover-Hold','Under desk. Cover head and neck.'],['02','Stay inside','Do NOT run outside.'],['03','Away from glass','Move from windows.'],['04','After shaking','Check injuries. Close gas.'],['05','Check stairs','Look for cracks first.'],['06','NDRF 1078','If anyone trapped.']],dos:['Drop-Cover-Hold','Turn off gas after','Move to open ground','Call NDRF 1078'],donts:['Stand in doorways','Run outside during shaking','Use lift','Re-enter until cleared'],nums:[{bg:'#1e3a8a',n:'112',l:'Police 112'},{bg:'#4c1d95',n:'1078',l:'NDRF 1078'},{bg:'#065f46',n:'108',l:'Ambulance 108'}]},
+  flood:{bg:'#1e3a8a',t:'Flood emergency',s:'Move UP \u00b7 Stay inside \u00b7 Call NDRF',steps:[['01','Move higher','Go to upper floors immediately.'],['02','Stay indoors','Do not enter floodwater outside.'],['03','Cut electricity','Switch off main supply.'],['04','Signal rescue','Stay visible at upper window.'],['05','No tap water','Floodwater contaminates supply.'],['06','NDRF 1078','Call for rescue.']],dos:['Move to highest floor','Turn off electrical switches','Call NDRF 1078','Signal with cloth'],donts:['Enter floodwater','Drive through floods','Touch wet fittings','Leave without rescue'],nums:[{bg:'#1e3a8a',n:'112',l:'Police 112'},{bg:'#4c1d95',n:'1078',l:'NDRF 1078'},{bg:'#065f46',n:'108',l:'Ambulance 108'}]},
+  storm:{bg:'#1e3a8a',t:'Storm / Cyclone',s:'Get inside \u00b7 Away from windows',steps:[['01','All inside','Stop outdoor activity.'],['02','Interior rooms','Away from windows.'],['03','Unplug switches','Main switch off.'],['04','No terrace','Nobody on roof or balcony.'],['05','Alert contacts','Send SMS.'],['06','NDMA alert','Wait for official all-clear.']],dos:['Shelter inside','Keep torch and radio','Fill water containers','Await all-clear'],donts:['Open windows','Go to terrace','Touch wet switches','Go outside'],nums:[{bg:'#1e3a8a',n:'112',l:'Police 112'},{bg:'#4c1d95',n:'1078',l:'NDRF 1078'},{bg:'#065f46',n:'108',l:'Ambulance 108'}]},
+  bomb:{bg:'#4c1d95',t:'Bomb threat',s:'Evacuate calmly \u00b7 Call Police 112',steps:[['01','Call Police 112','Immediately. Give address.'],['02','Do NOT touch','Never touch suspicious object.'],['03','Evacuate calmly','No mobile near object.'],['04','500m away','Minimum safe distance.'],['05','Stairs only','Blast can damage lift.'],['06','Wait','Bomb squad must clear.']],dos:['Call 112 immediately','Evacuate via stairs','Move 500m away','Describe object to police'],donts:['Touch suspicious object','Use mobile near device','Use lift','Re-enter before clearance'],nums:[{bg:'#1e3a8a',n:'112',l:'Police 112'},{bg:'#4c1d95',n:'1078',l:'NDRF 1078'},{bg:'#7f1d1d',n:'101',l:'Fire 101'}]},
+  gas:{bg:'#064e3b',t:'Gas leak',s:'No flames \u00b7 No switches \u00b7 Evacuate',steps:[['01','No flames','No matches, candles, lighters.'],['02','No switches','Even light switch can ignite.'],['03','Wet cloth','Cover mouth. Breathe shallow.'],['04','Close valve','Only if safe.'],['05','Open windows','Ventilate as you exit.'],['06','Call 101','Fire Brigade handles gas.']],dos:['Leave immediately','Open windows','Cover mouth','Call Fire 101'],donts:['Light any flame','Switch any device','Use lift','Re-enter until cleared'],nums:[{bg:'#1e3a8a',n:'112',l:'Police 112'},{bg:'#7f1d1d',n:'101',l:'Fire 101'},{bg:'#065f46',n:'108',l:'Ambulance 108'}]},
+  collapse:{bg:'#7c2d12',t:'Building collapse',s:'Get out NOW \u00b7 Call NDRF 1078',steps:[['01','Exit immediately','Leave everything. Move NOW.'],['02','Stairs only','Lift may be damaged.'],['03','Interior walls','Stay near load-bearing walls.'],['04','If trapped','Tap pipe rhythmically to signal.'],['05','Cover face','Concrete dust is dangerous.'],['06','NDRF 1078','Search and rescue.']],dos:['Exit immediately','Stairs near interior walls','Tap pipe if trapped','Call NDRF 1078'],donts:['Use lift','Go back for belongings','Move near exterior walls','Re-enter near rubble'],nums:[{bg:'#1e3a8a',n:'112',l:'Police 112'},{bg:'#4c1d95',n:'1078',l:'NDRF 1078'},{bg:'#065f46',n:'108',l:'Ambulance 108'}]}
+};
+function selEm(type,el){
+  document.querySelectorAll('.em-chip').forEach(function(c){c.classList.remove('on');});if(el)el.classList.add('on');
+  var e=EMD[type];if(!e)return;
+  var h='<div class="em-banner" style="background:'+e.bg+'"><div class="em-title">'+e.t+'</div><div class="em-sub">'+e.s+'</div></div>';
+  h+='<div class="em-calls">';e.nums.forEach(function(n){h+='<a class="em-call-btn" style="background:'+n.bg+'" href="tel:'+n.n+'">'+n.l+'</a>';});h+='</div>';
+  h+='<div class="steps-grid">';e.steps.forEach(function(s){h+='<div class="step-card"><div class="step-num">'+s[0]+'</div><div class="step-title">'+s[1]+'</div><div class="step-body">'+s[2]+'</div></div>';});h+='</div>';
+  h+='<div class="do-dont"><div class="do-box"><strong>\u2713 DO</strong>';e.dos.forEach(function(d){h+='<div class="dd-item">\u2713 '+d+'</div>';});h+='</div><div class="dont-box"><strong>\u2717 DON\'T</strong>';e.donts.forEach(function(d){h+='<div class="dd-item">\u2717 '+d+'</div>';});h+='</div></div>';
+  document.getElementById('emContent').innerHTML=h;
+}
+function trigSOS(){
+  sosOn=!sosOn;var btn=document.getElementById('sosBtn');
+  if(sosOn){
+    btn.textContent='CANCEL SOS';btn.classList.add('pulse');beep(6);vib();
+    var ph=(B.phone||'').replace(/[^\d]/g,'');
+    if(ph){var msg=encodeURIComponent('\uD83D\uDEA8 SOS from '+B.name+'\nGPS: '+cLat.toFixed(5)+'N, '+cLng.toFixed(5)+'E\nhttps://maps.google.com/?q='+cLat+','+cLng+'\nRespond immediately!');setTimeout(function(){try{window.open('https://wa.me/91'+ph+'?text='+msg,'_blank');}catch(x){}},500);}
+    toast('\uD83D\uDEA8 SOS activated!',4000);
+  }else{
+    btn.innerHTML='<svg style="width:17px;height:17px;fill:none;stroke:white;stroke-width:2;stroke-linecap:round" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>Emergency SOS';
+    btn.classList.remove('pulse');toast('SOS cancelled');
+  }
+}
+function doDrill(){beep(3);vib();toast('\uD83D\uDD14 Fire drill alarm triggered!');}
+function beep(n){try{var ac=new(window.AudioContext||window.webkitAudioContext)(),t=ac.currentTime;for(var i=0;i<n;i++){var o=ac.createOscillator(),g=ac.createGain();o.connect(g);g.connect(ac.destination);o.frequency.value=i%2===0?880:660;o.type='square';g.gain.setValueAtTime(.3,t);o.start(t);o.stop(t+.28);t+=.38;}}catch(e){}}
+function vib(){try{if(navigator.vibrate)navigator.vibrate([200,80,200]);}catch(e){}}
+function watchGPS(){if(!navigator.geolocation)return;navigator.geolocation.watchPosition(function(p){cLat=p.coords.latitude;cLng=p.coords.longitude;var el=document.getElementById('liveGPS');if(el)el.textContent=cLat.toFixed(4)+'N \u00b7 '+cLng.toFixed(4)+'E';},function(){});}
+function cpUPI(){var b=document.getElementById('cpb');try{navigator.clipboard.writeText('7678337699@ptsbi').then(function(){b.textContent='Copied!';b.classList.add('ok');setTimeout(function(){b.textContent='Copy';b.classList.remove('ok');},2000);});}catch(e){b.textContent='Copied!';}toast('Copied: 7678337699@ptsbi');}
+function doAct(mode){
+  var ref=mode==='b'?'PAID_'+Date.now():((document.getElementById('txnI')||{}).value||'').trim()||('TXN_'+Date.now());
+  showSP('Activating full access...');
+  try{localStorage.setItem('sv_paid','1');localStorage.setItem('sv_txn',ref);}catch(e){}
+  setTimeout(function(){hideSP();paid=true;var b=document.getElementById('premBadge');if(b){b.style.background='#166634';b.innerHTML='\u2B50 Full access \u2713';}go('s5');toast('Full access activated!');},1000);
+}
+function oP(n){
+  if(!paid){if(confirm('Premium feature.\n\nPay \u20B9500 to unlock all features.\nTap OK to go to payment screen.')){go('s4');}return;}
+  ['Air','Voi','Fam','Wet','Ins','Lan','Sos'].forEach(function(id){var el=document.getElementById('pp'+id);if(el)el.style.display='none';});
+  var t=document.getElementById('pp'+n);if(t){t.style.display='block';if(n==='Air')bAI();else if(n==='Voi'){bAI();syncVC();}else if(n==='Fam')rFM();else if(n==='Wet')lWt();else if(n==='Ins')bCL();else if(n==='Lan')bLn();else if(n==='Sos'){bSC();rSH();}}
+}
+function cP(id){var el=document.getElementById(id);if(el)el.style.display='none';}
+var AIR={fire:{g:['Raise alarm \u2014 shout FIRE','Stay low \u2014 crawl if smoke','Follow EXIT signs to corridor','Ground floor main exit','Assembly Point A \u2014 50m front'],u:['Exit room \u2014 close door','Find staircase \u2014 never lift','Descend holding banister','Ground floor \u2014 EXIT signs','Assembly Point \u2014 wait']},quake:{g:['DROP to knees immediately','COVER under desk','HOLD \u2014 do not move','After shaking \u2014 check hazards','Walk to open ground'],u:['DROP-COVER-HOLD under desk','Wait \u2014 do not move','Check stairs for cracks','Descend carefully','100m from building']},flood:{g:['Move to upper floors NOW','Stay inside \u2014 no floodwater','Turn off electricity','Signal from upper window','NDRF 1078'],u:['Move to highest floor','Turn off switches','Signal rescuers','Do not swim in floodwater','NDRF 1078 coming']},bomb:{g:['Call Police 112','Do not touch object','Evacuate via stairs','500m from building','Bomb squad clearance'],u:['Call 112 \u2014 give floor','Alert everyone','Staircase far from object','500m away','Do not re-enter']},gas:{g:['No flames, no switches','Wet cloth on mouth','Open windows as you exit','Exit 100m upwind','Call Fire 101'],u:['No electrical switch','Wet cloth on mouth','Open windows every floor','Descend carefully','100m upwind \u2014 call 101']}};
+function bAI(){var fi=document.getElementById('aiF');var ei=document.getElementById('aiE');var fl=fi?parseInt(fi.value):0;var et=ei?ei.value:'fire';var r=AIR[et]||AIR.fire;aiSteps=fl===0?r.g:r.u;aiIdx=0;rAS('aiCard');rAS('vCard');}
+function rAS(cid){var el=document.getElementById(cid);if(!el)return;var fi=document.getElementById('aiF');var ei=document.getElementById('aiE');var fl=fi?parseInt(fi.value):0;var et=ei?ei.value:'fire';var lbl=fl===0?'Ground':(fl+'F');var nm={fire:'Fire',quake:'Earthquake',flood:'Flood',bomb:'Bomb',gas:'Gas'};el.innerHTML='<div style="font-size:11px;font-weight:700;color:var(--teal);margin-bottom:10px">AI Route \u2014 '+lbl+' floor \u00b7 '+(nm[et]||'Fire')+'</div>'+aiSteps.map(function(s,i){var done=i<aiIdx,act=i===aiIdx;return '<div class="ai-row'+(act?' active':'')+'"><div class="ai-c'+(done?' done':act?' act':'')+'">'+( done?'\u2713':(i+1))+'</div><div class="ai-t">'+s+'</div></div>';}).join('');}
+function nStep(){if(!aiSteps.length){bAI();return;}if(aiIdx<aiSteps.length-1){aiIdx++;rAS('aiCard');rAS('vCard');spk(aiIdx);}else{toast('You have reached safety \u2713');spk(-1);}}
+function syncVC(){rAS('vCard');}
+function sVoice(){if(!aiSteps.length)bAI();aiIdx=0;rAS('aiCard');rAS('vCard');spk(0);clearInterval(vTimer);vTimer=setInterval(function(){if(aiIdx<aiSteps.length-1){aiIdx++;rAS('aiCard');rAS('vCard');spk(aiIdx);}else{clearInterval(vTimer);spk(-1);}},8000);toast('Voice navigation started');oP('Voi');}
+function stVoice(){clearInterval(vTimer);try{window.speechSynthesis.cancel();}catch(e){}toast('Voice stopped');var e=document.getElementById('vText');if(e)e.textContent='Stopped';}
+function spk(idx){var text=idx===-1?'You have reached safety.':(idx+1)+'. '+aiSteps[idx];try{if('speechSynthesis' in window){window.speechSynthesis.cancel();var u=new SpeechSynthesisUtterance(text);u.lang='en-IN';u.rate=0.88;u.pitch=1;window.speechSynthesis.speak(u);}}catch(e){}var e=document.getElementById('vText');if(e)e.textContent=text;}
+function aFM(){var nm=prompt('Family member name:');if(!nm)return;var ph=prompt('Mobile number:');if(!ph)return;fmArr.push({name:nm,phone:ph.replace(/\D/g,''),safe:true});try{localStorage.setItem('sv_fm',JSON.stringify(fmArr));}catch(e){}rFM();toast(nm+' added');}
+function rFM(){try{var d=localStorage.getItem('sv_fm');if(d)fmArr=JSON.parse(d);}catch(e){}var el=document.getElementById('fmList');if(!el)return;if(!fmArr.length){el.innerHTML='<div style="background:#fff;border-radius:12px;padding:16px;border:1px solid var(--border);text-align:center;font-size:13px;color:var(--muted)">No members added. Tap + Add.</div>';return;}var cols=['#e1f5f5','#fce7f3','#fff7ed','#dcfce7','#f5f3ff'];el.innerHTML=fmArr.map(function(m,i){var ini=m.name.trim().split(' ').map(function(n){return n[0];}).join('').toUpperCase().slice(0,2);return '<div class="fm-card"><div class="fm-av" style="background:'+cols[i%cols.length]+'">'+ini+'</div><div style="flex:1"><div class="fm-nm">'+m.name+'</div><div class="'+(m.sos?'fm-sos-st':'fm-safe')+'">'+(m.sos?'\uD83D\uDEA8 SOS':'\u2713 Safe')+'</div></div><button onclick="sosFM(\''+m.phone+'\',\''+m.name+'\')" class="fm-sos-btn">SOS</button></div>';}).join('');}
+function sosFM(ph,nm){var msg=encodeURIComponent('\uD83D\uDEA8 SOS from '+B.name+'\nGPS: '+cLat.toFixed(5)+'N, '+cLng.toFixed(5)+'E\nhttps://maps.google.com/?q='+cLat+','+cLng);window.open('https://wa.me/91'+ph+'?text='+msg,'_blank');toast('SOS sent to '+nm);}
+function shLoc(){var msg=encodeURIComponent('\uD83D\uDCCD My location:\n'+cLat.toFixed(5)+'N, '+cLng.toFixed(5)+'E\nhttps://maps.google.com/?q='+cLat+','+cLng);window.open('https://wa.me/?text='+msg,'_blank');}
+function lWt(){var m=new Date().getMonth();var sc=[{temp:38,desc:'Hot day',emoji:'\u2600\uFE0F',bg:'linear-gradient(135deg,#f59e0b,#ef4444)',hum:'35%',wind:'8 km/h',feel:'43\u00b0C',al:'heat'},{temp:28,desc:'Partly cloudy',emoji:'\u26C5',bg:'linear-gradient(135deg,#0ea5e9,#0284c7)',hum:'62%',wind:'14 km/h',feel:'30\u00b0C',al:null},{temp:22,desc:'Overcast',emoji:'\uD83C\uDF25\uFE0F',bg:'linear-gradient(135deg,#475569,#334155)',hum:'78%',wind:'20 km/h',feel:'20\u00b0C',al:null},{temp:25,desc:'Light rain',emoji:'\uD83C\uDF27\uFE0F',bg:'linear-gradient(135deg,#1e40af,#1d4ed8)',hum:'88%',wind:'25 km/h',feel:'22\u00b0C',al:'rain'},{temp:18,desc:'Heavy storm',emoji:'\u26C8\uFE0F',bg:'linear-gradient(135deg,#1e1b4b,#4c1d95)',hum:'95%',wind:'45 km/h',feel:'14\u00b0C',al:'storm'}];var idx=m>=3&&m<=5?0:m>=6&&m<=9?3:m>=10?2:1;var w=sc[idx];var hero=document.getElementById('wtHero');if(hero)hero.style.background=w.bg;var ids={wtTemp:w.temp+'\u00b0C',wtDesc:w.desc,wtEmoji:w.emoji,wtHum:w.hum,wtWind:w.wind,wtFeel:w.feel,wtLoc:B.addr||B.name||'Your location'};Object.keys(ids).forEach(function(id){var e=document.getElementById(id);if(e)e.innerHTML=ids[id];});var al=document.getElementById('wtAlerts');if(!al)return;var alerts=[];if(w.al==='heat')alerts.push({cls:'wa-r',icon:'\uD83C\uDF21\uFE0F',t:'Heat wave alert',b:'Temperature '+w.temp+'\u00b0C. Keep occupants indoors.'});if(w.al==='rain')alerts.push({cls:'wa-a',icon:'\uD83C\uDF27\uFE0F',t:'Heavy rainfall warning',b:'Risk of waterlogging. Check drains and exits.'});if(w.al==='storm')alerts.push({cls:'wa-r',icon:'\u26C8\uFE0F',t:'Severe storm warning',b:'All outdoor activities suspended.'});alerts.push({cls:'',icon:'\uD83D\uDCCB',t:'Safety check recommended',b:'Review exits and assembly points.'});al.innerHTML=alerts.map(function(a){return '<div class="wa '+a.cls+'"><div style="font-size:22px;flex-shrink:0">'+a.icon+'</div><div><div style="font-size:12px;font-weight:700;color:var(--text)">'+a.t+'</div><div style="font-size:11px;color:#555;margin-top:2px;line-height:1.5">'+a.b+'</div></div></div>';}).join('');}
+var CLi=['Fire extinguishers charged and accessible','Emergency exit signs lit and visible','All exits clear \u2014 no obstructions','Fire alarm tested this month','Assembly points clearly marked','Emergency contact list updated','First aid kit fully stocked','Sprinkler system working','Emergency lighting working','Evacuation plan displayed on all floors'];
+function bCL(){var sv={};try{var d=localStorage.getItem('sv_cl');if(d)sv=JSON.parse(d);}catch(e){}var el=document.getElementById('clItems');if(!el)return;el.innerHTML=CLi.map(function(item,i){var done=!!sv[i];return '<div class="cl-item'+(done?' done':'')+'" onclick="tCL('+i+',this)"><div class="cl-chk">'+(done?'\u2713':'')+'</div><div style="font-size:12px;color:var(--text);flex:1">'+item+'</div></div>';}).join('');upSc();}
+function tCL(idx,el){el.classList.toggle('done');var d=el.classList.contains('done');el.querySelector('.cl-chk').innerHTML=d?'\u2713':'';var sv={};try{var s=localStorage.getItem('sv_cl');if(s)sv=JSON.parse(s);}catch(e){}sv[idx]=d;try{localStorage.setItem('sv_cl',JSON.stringify(sv));}catch(e){}upSc();}
+function upSc(){var t=document.querySelectorAll('.cl-item').length,d=document.querySelectorAll('.cl-item.done').length;var e=document.getElementById('inspSc');if(e)e.textContent=d+'/'+t;}
+var LNGS=[{c:'hi',n:'\u0939\u093f\u0902\u0926\u0940',e:'Hindi'},{c:'bn',n:'\u09AC\u09BE\u0982\u09B2\u09BE',e:'Bengali'},{c:'te',n:'\u0C24\u0C46\u0C32\u0C41\u0C17\u0C41',e:'Telugu'},{c:'mr',n:'\u092E\u0930\u093E\u0920\u0940',e:'Marathi'},{c:'ta',n:'\u0BA4\u0BAE\u0BBF\u0BB4\u0BCD',e:'Tamil'},{c:'gu',n:'\u0A97\u0AC1\u0A9C\u0AB0\u0ABE\u0AA4\u0AC0',e:'Gujarati'},{c:'ur',n:'\u0627\u0631\u062F\u0648',e:'Urdu'},{c:'kn',n:'\u0C95\u0CA8\u0CCD\u0CA8\u0CA1',e:'Kannada'},{c:'or',n:'\u0B13\u0B21\u0B3C\u0B3F\u0B06',e:'Odia'},{c:'pa',n:'\u0A2A\u0A70\u0A1C\u0A3E\u0A2C\u0A40',e:'Punjabi'},{c:'ml',n:'\u0D2E\u0D32\u0D2F\u0D3E\u0D33\u0D02',e:'Malayalam'},{c:'as',n:'\u0985\u09B8\u09AE\u09C0\u09AF\u09BC\u09BE',e:'Assamese'}];
+var LFi={hi:'\u0906\u0917 \u0906\u092A\u093E\u0924\u0915\u093E\u0932\n1. \u0924\u0941\u0930\u0902\u0924 \u0905\u0932\u093E\u0930\u094D\u092E\n2. \u0928\u0940\u091A\u0947 \u0930\u0939\u0947\u0902\n3. \u0915\u0947\u0935\u0932 \u0938\u0940\u0922\u093C\u093F\u092F\u093E\u0902\n4. \u0926\u0930\u0935\u093E\u091C\u093E \u092E\u0939\u0938\u0942\u0938 \u0915\u0930\u0915\u0947\n5. \u090F\u0915\u0924\u094D\u0930\u0923 \u0938\u094D\u0925\u0932',bn:'\u0986\u0997\u09C1\u09A8 \u099C\u09B0\u09C1\u09B0\u09BF\n1. \u09A4\u09BE\u09CE\u0995\u09CD\u09B7\u09A3\u09BF\u0995 \u0985\u09CD\u09AF\u09BE\u09B2\u09BE\u09B0\u09CD\u09AE\n2. \u09A8\u09BF\u099A\u09C7 \u09A5\u09BE\u0995\u09C1\u09A8\n3. \u09B6\u09C1\u09A7\u09C1 \u09B8\u09BF\u0981\u09DC\u09BF\n4. \u09A6\u09B0\u099C\u09BE \u0985\u09A8\u09C1\u09AD\u09AC\n5. \u09B8\u09AE\u09BE\u09AC\u09C7\u09B6 \u09B8\u09CD\u09A5\u09B2',te:'\u0C05\u0C17\u0C4D\u0C28\u0C3F \u0C05\u0C24\u0C4D\u0C2F\u0C35\u0C38\u0C30\u0C02\n1. \u0C35\u0C46\u0C02\u0C1F\u0C28\u0C47 \u0C05\u0C32\u0C3E\u0C30\u0C02\n2. \u0C15\u0C3F\u0C02\u0C26 \u0C09\u0C02\u0C21\u0C02\u0C21\u0C3F\n3. \u0C2E\u0C46\u0C1F\u0C4D\u0C32\u0C41 \u0C2E\u0C3E\u0C24\u0C4D\u0C30\u0C2E\u0C47\n4. \u0C24\u0C32\u0C41\u0C2A\u0C41 \u0C05\u0C28\u0C41\u0C2D\u0C35\u0C3F\u0C02\u0C1A\u0C02\u0C21\u0C3F\n5. \u0C38\u0C2E\u0C3E\u0C35\u0C47\u0C36 \u0C38\u0C4D\u0C25\u0C32\u0C02',mr:'\u0906\u0917 \u0906\u0923\u0940\u092C\u093E\u0923\u0940\n1. \u0932\u0917\u0947\u091A \u0905\u0932\u093E\u0930\u094D\u092E\n2. \u0916\u093E\u0932\u0940 \u0930\u093E\u0939\u093E\n3. \u092B\u0915\u094D\u0924 \u091C\u093F\u0928\u0947\n4. \u0926\u093E\u0930 \u091C\u093E\u0923\u0935\u0942\u0928\n5. \u090F\u0915\u0924\u094D\u0930\u0923 \u0920\u093F\u0915\u093E\u0923',ta:'\u0BA4\u0BC0 \u0B85\u0BB5\u0B9A\u0BB0\u0BA8\u0BBF\u0BB2\u0BC8\n1. \u0B89\u0B9F\u0BA9\u0BC7 \u0B85\u0BB2\u0BBE\u0BB0\u0BAE\u0BCD\n2. \u0B95\u0BC0\u0BB4\u0BC7 \u0B87\u0BB0\u0BC1\u0B99\u0BCD\u0B95\u0BB3\u0BCD\n3. \u0BAA\u0B9F\u0BBF\u0B95\u0B9F\u0BCD\u0B9F\u0BC1\u0B95\u0BB3\u0BCD \u0BAE\u0B9F\u0BCD\u0B9F\u0BC1\u0BAE\u0BCD\n4. \u0B95\u0BA4\u0BB5\u0BC8 \u0B89\u0BA3\u0BB0\u0BC1\u0B99\u0BCD\u0B95\u0BB3\u0BCD\n5. \u0B95\u0BC2\u0B9F\u0BCD\u0B9F \u0B87\u0B9F\u0BAE\u0BCD',gu:'\u0A86\u0A97 \u0A95\u0A9F\u0ACB\u0A95\u0A9F\u0AC0\n1. \u0A85\u0AB2\u0ABE\u0AB0\u0ACD\u0AAE\n2. \u0AA8\u0AC0\u0A9A\u0AC7 \u0AB0\u0AB9\u0ACB\n3. \u0AB8\u0AC0\u0AA1\u0AC0\n4. \u0AA6\u0AB0\u0AB5\u0ABE\u0A9C\u0ACB \u0A85\u0AA8\u0AC1\u0AAD\u0AB5\n5. \u0A8F\u0A95\u0AA4\u0ACD\u0AB0 \u0AB8\u0ACD\u0AA5\u0AB3',ur:'\u0622\u06AF \u0627\u06CC\u0645\u0631\u062C\u0646\u0633\u06CC\n1. \u0641\u0648\u0631\u06CC \u0627\u0644\u0627\u0631\u0645\n2. \u0646\u06CC\u0686\u06D2 \u0631\u06C1\u06CC\u06BA\n3. \u0635\u0631\u0641 \u0633\u06CC\u0691\u06BE\u06CC\u0627\u06BA\n4. \u062F\u0631\u0648\u0627\u0632\u06C1 \u0645\u062D\u0633\u0648\u0633\n5. \u0627\u062C\u062A\u0645\u0627\u0639\u06CC \u0645\u0642\u0627\u0645',kn:'\u0CAC\u0CC6\u0C82\u0C95\u0CBF \u0CA4\u0CC1\u0CB0\u0CCD\u0CA4\u0CC1\n1. \u0C85\u0CB2\u0CBE\u0CB0\u0C82\n2. \u0C95\u0CC6\u0CB3\u0C97\u0CC6 \u0C87\u0CB0\u0CBF\n3. \u0CAE\u0CC6\u0C9F\u0CCD\u0C9F\u0CBF\u0CB2\u0CC1 \u0CAE\u0CBE\u0CA4\u0CCD\u0CB0\n4. \u0CAC\u0CBE\u0C97\u0CBF\u0CB2\u0CC1 \u0C85\u0CA8\u0CC1\u0CAD\u0CB5\u0CBF\u0CB8\u0CBF\n5. \u0CB8\u0CAD\u0CBE \u0CB8\u0CCD\u0CA5\u0CB3',or:'\u0B28\u0B3F\u0B06\u0B01 \u0B1C\u0B30\u0B41\u0B30\u0B40\n1. \u0B06\u0B32\u0B3E\u0B30\u0B4D\u0B2E\n2. \u0B24\u0B33 \u0B25\u0B3E\u0B06\n3. \u0B36\u0B41\u0B27\u0B41 \u0B38\u0B3F\u0B22\u0B3C\u0B3F\n4. \u0B26\u0B4D\u0B71\u0B3E\u0B30 \u0B05\u0B28\u0B41\u0B2D\u0B2C\n5. \u0B0F\u0B15\u0B24\u0B4D\u0B30 \u0B38\u0B4D\u0B25\u0B3E\u0B28',pa:'\u0A05\u0A71\u0A17 \u0A10\u0A2E\u0A30\u0A1C\u0A48\u0A02\u0A38\u0A40\n1. \u0A05\u0A32\u0A3E\u0A30\u0A2E\n2. \u0A39\u0A47\u0A20\u0A3E\u0A02 \u0A30\u0A39\u0A4B\n3. \u0A38\u0A3F\u0A30\u0A2B\u0A3C \u0A2A\u0A4C\u0A5C\u0A40\u0A06\u0A02\n4. \u0A26\u0A30\u0A35\u0A3E\u0A1C\u0A3C\u0A3E \u0A2E\u0A39\u0A3F\u0A38\u0A42\u0A38\n5. \u0A07\u0A71\u0A15\u0A20\u0A47 \u0A39\u0A4B\u0A23',ml:'\u0D24\u0D40 \u0D05\u0D1F\u0D3F\u0D2F\u0D28\u0D4D\u0D24\u0D30\u0D02\n1. \u0D09\u0D1F\u0D28\u0D4D\u200D \u0D05\u0D32\u0D3E\u0D02\n2. \u0D15\u0D40\u0D34\u0D46 \u0D28\u0D3F\u0D7D\u0D15\u0D4D\u0D15\u0D42\n3. \u0D2A\u0D1F\u0D3F\u0D15\u0D7E \u0D2E\u0D3E\u0D24\u0D4D\u0D30\u0D02\n4. \u0D35\u0D3E\u0D24\u0D3F\u0D7D \u0D05\u0D28\u0D41\u0D2D\u0D35\u0D3F\u0D15\u0D4D\u0D15\u0D42\n5. \u0D12\u0D24\u0D4D\u0D24\u0D4B\u0D30\u0D41\u0D2E\u0D3F\u0D15\u0D4D\u0D15\u0D7D',as:'\u099C\u09C1\u0987 \u099C\u09F0\u09C1\u09B0\u09C0\n1. \u098F\u09B2\u09BE\u09B0\u09CD\u09AE\n2. \u09A4\u09B2\u09B2\u09C8 \u09A5\u09BE\u0995\u0995\n3. \u09AC\u09BE\u099F \u09AE\u09BE\u09A4\u09CD\u09B0\n4. \u09A6\u09F0\u099C\u09BE \u0985\u09A8\u09C1\u09AD\u09AC\n5. \u09B8\u09AE\u09BE\u09AC\u09C7\u09B6 \u09B8\u09CD\u09A5\u09BE\u09A8'};
+function bLn(){var el=document.getElementById('langGrid');if(!el)return;el.innerHTML=LNGS.map(function(l){return '<div class="lb'+(l.c===curLang?' on':'')+'" onclick="sLn(\''+l.c+'\')"><span class="ln">'+l.n+'</span><span class="le">'+l.e+'</span></div>';}).join('');sLP();}
+function sLn(c){curLang=c;document.querySelectorAll('.lb').forEach(function(b,i){b.classList.toggle('on',LNGS[i]&&LNGS[i].c===c);});sLP();toast('Language: '+(LNGS.find(function(l){return l.c===c;})||{}).e);}
+function sLP(){var el=document.getElementById('langPrev');if(!el)return;var t=LFi[curLang]||LFi.hi;el.innerHTML='<div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:8px">\uD83D\uDD25 Fire emergency instructions</div>'+t.split('\n').map(function(line){return '<div style="font-size:13px;color:'+(line.match(/^\d/)?' var(--text)':'#b91c1c')+';font-weight:'+(line.match(/^\d/)?'400':'700')+';line-height:2">'+line+'</div>';}).join('');}
+var SOS_CHS=[{k:'police',i:'\uD83D\uDEA8',n:'Police',m:'112'},{k:'fire',i:'\uD83D\uDD25',n:'Fire',m:'101'},{k:'ambulance',i:'\uD83D\uDE91',n:'Ambulance',m:'108'},{k:'family',i:'\uD83D\uDC68\u200D\uD83D\uDC69\u200D\uD83D\uDC67',n:'Family',m:'WhatsApp'},{k:'ndrf',i:'\uD83D\uDCCA',n:'NDRF',m:'1078'}];
+function bSC(){SOS_CHS.forEach(function(c){if(!(c.k in sosChs))sosChs[c.k]=true;});var el=document.getElementById('sosCh');if(!el)return;el.innerHTML=SOS_CHS.map(function(c){return '<div class="sch'+(sosChs[c.k]?' armed':'')+'" id="sc_'+c.k+'" onclick="tSC(\''+c.k+'\')"><div class="sch-i">'+c.i+'</div><div class="sch-n">'+c.n+'</div><div class="sch-m">'+c.m+'</div></div>';}).join('');}
+function tSC(k){sosChs[k]=!sosChs[k];var e=document.getElementById('sc_'+k);if(e)e.classList.toggle('armed',sosChs[k]);}
+function tSP(){beep(6);vib();var msg=encodeURIComponent('\uD83D\uDEA8 SOS EMERGENCY\n'+B.name+'\n'+B.addr+'\nGPS: '+cLat.toFixed(5)+'N, '+cLng.toFixed(5)+'E\nhttps://maps.google.com/?q='+cLat+','+cLng+'\n'+new Date().toLocaleTimeString('en-IN'));var d=0;if(sosChs.police){setTimeout(function(){try{window.open('tel:112','_self');}catch(e){}},d);d+=600;}if(sosChs.family&&B.phone){setTimeout(function(){window.open('https://wa.me/91'+B.phone.replace(/\D/g,'')+'?text='+msg,'_blank');},d);d+=600;}fmArr.forEach(function(m,i){if(m.phone)setTimeout(function(){window.open('https://wa.me/91'+m.phone+'?text='+msg,'_blank');},d+i*300);});var en={time:new Date().toLocaleTimeString('en-IN'),loc:cLat.toFixed(4)+'N,'+cLng.toFixed(4)+'E',chs:Object.keys(sosChs).filter(function(k){return sosChs[k];}).join(', ')};sosLog.unshift(en);try{localStorage.setItem('sv_sh',JSON.stringify(sosLog.slice(0,5)));}catch(e){}rSH();toast('SOS sent to all channels!');}
+function rSH(){try{var d=localStorage.getItem('sv_sh');if(d)sosLog=JSON.parse(d);}catch(e){}var el=document.getElementById('sosHist');if(!el)return;if(!sosLog.length){el.innerHTML='<div style="font-size:12px;color:var(--muted)">No SOS sent yet</div>';return;}el.innerHTML=sosLog.map(function(s){return '<div class="shi"><div style="width:7px;height:7px;border-radius:50%;background:#ef4444;margin-top:3px;flex-shrink:0"></div><div style="flex:1">'+s.loc+' \u00b7 '+s.chs+'</div><div style="color:var(--muted);flex-shrink:0">'+s.time+'</div></div>';}).join('');}
+function rApp(){if(confirm('Reset SafeVac? Clears all building data.')){try{localStorage.clear();}catch(e){}location.reload();}}
+(function(){
+  try{paid=!!localStorage.getItem('sv_paid');}catch(e){}
+  try{var d=localStorage.getItem('sv_fm');if(d)fmArr=JSON.parse(d);}catch(e){}
+  try{
+    var bd=localStorage.getItem('sv_b');
+    if(bd){B=JSON.parse(bd);cLat=B.lat;cLng=B.lng;buildApp();document.querySelectorAll('.scr').forEach(function(s){s.classList.remove('on');});document.getElementById('s3').classList.add('on');}
+  }catch(e){}
+})();
+</script>
+</body>
+</html>
